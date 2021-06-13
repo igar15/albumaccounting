@@ -21,6 +21,7 @@ import ru.javaprojects.albumaccounting.util.exception.IllegalRequestDataExceptio
 import ru.javaprojects.albumaccounting.util.exception.NotFoundException;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.ConstraintViolationException;
 import java.util.Map;
 
 import static ru.javaprojects.albumaccounting.util.exception.ErrorType.*;
@@ -31,20 +32,17 @@ public class AppExceptionHandler {
     private static final Logger log = LoggerFactory.getLogger(AppExceptionHandler.class);
 
     public static final String EXCEPTION_DUPLICATE_EMAIL = "User with this email already exists";
-    public static final String EXCEPTION_DUPLICATE_RESTAURANT = "Restaurant with those name and address already exists";
-    public static final String EXCEPTION_DUPLICATE_MENU = "Today's menu for this restaurant already exists";
-    public static final String EXCEPTION_DUPLICATE_DISH = "Duplicate dish names in this menu";
-    public static final String EXCEPTION_DUPLICATE_VOTE = "Today's vote for this user already exists";
-    public static final String EXCEPTION_UPDATE_VOTE = "It is too late to change your vote";
+    public static final String EXCEPTION_DUPLICATE_DEPARTMENT = "Department with this name already exists";
+    public static final String EXCEPTION_DUPLICATE_EMPLOYEE = "Employee with those name and phone number already exists";
+    public static final String EXCEPTION_DUPLICATE_ALBUM = "Album with those decimal number and stamp already exists";
     public static final String EXCEPTION_ACCESS_DENIED = "You do not have enough permission";
     public static final String EXCEPTION_BAD_CREDENTIALS = "Email / password incorrect. Please try again";
 
     private static final Map<String, String> CONSTRAINS_MAP = Map.of(
             "users_unique_email_idx", EXCEPTION_DUPLICATE_EMAIL,
-            "restaurants_unique_name_address_idx", EXCEPTION_DUPLICATE_RESTAURANT,
-            "menus_unique_restaurant_date_idx", EXCEPTION_DUPLICATE_MENU,
-            "dishes_unique_menu_name_idx", EXCEPTION_DUPLICATE_DISH,
-            "votes_unique_user_datetime_idx", EXCEPTION_DUPLICATE_VOTE);
+            "departments_unique_name_idx", EXCEPTION_DUPLICATE_DEPARTMENT,
+            "employees_unique_name_phone_number_idx", EXCEPTION_DUPLICATE_EMPLOYEE,
+            "albums_unique_decimal_number_stamp_idx", EXCEPTION_DUPLICATE_ALBUM);
 
     @ExceptionHandler(NoHandlerFoundException.class)
     public ResponseEntity<ErrorInfo> wrongRequest(HttpServletRequest req, NoHandlerFoundException e) {
@@ -76,6 +74,11 @@ public class AppExceptionHandler {
                 .map(fe -> String.format("[%s] %s", fe.getField(), fe.getDefaultMessage()))
                 .toArray(String[]::new);
         return logAndGetErrorInfo(req, e, false, VALIDATION_ERROR, details);
+    }
+
+    @ExceptionHandler(ConstraintViolationException.class)
+    public ResponseEntity<ErrorInfo> validationError(HttpServletRequest req, ConstraintViolationException e) {
+        return logAndGetErrorInfo(req, e, false, VALIDATION_ERROR, e.getMessage());
     }
 
     @ExceptionHandler({IllegalRequestDataException.class, MethodArgumentTypeMismatchException.class, HttpMessageNotReadableException.class})

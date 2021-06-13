@@ -34,7 +34,7 @@ public class AlbumService {
 
     public Page<Album> getAlbums(Pageable pageable) {
         Assert.notNull(pageable, "pageable must not be null");
-        return repository.findAllBy(pageable);
+        return repository.findAllByOrderByDecimalNumber(pageable);
     }
 
     public void delete(int id) {

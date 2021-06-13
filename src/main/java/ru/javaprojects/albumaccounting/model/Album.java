@@ -27,6 +27,12 @@ public class Album extends AbstractBaseEntity {
     public Album() {
     }
 
+    public Album(Integer id, String decimalNumber, Stamp stamp) {
+        super(id);
+        this.decimalNumber = decimalNumber;
+        this.stamp = stamp;
+    }
+
     public Album(Integer id, String decimalNumber, Stamp stamp, Employee holder) {
         super(id);
         this.decimalNumber = decimalNumber;

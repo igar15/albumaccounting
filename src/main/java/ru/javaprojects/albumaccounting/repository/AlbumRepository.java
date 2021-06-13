@@ -18,5 +18,5 @@ public interface AlbumRepository extends JpaRepository<Album, Integer> {
     Optional<Album> findById(int id);
 
     @EntityGraph(attributePaths = {"holder"})
-    Page<Album> findAllBy(Pageable pageable);
+    Page<Album> findAllByOrderByDecimalNumber(Pageable pageable);
 }

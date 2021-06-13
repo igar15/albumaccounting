@@ -13,7 +13,7 @@ import javax.validation.constraints.Size;
 public class Employee extends AbstractNamedEntity {
 
     @NotBlank
-    @Size(min = 2, max = 100)
+    @Size(min = 5, max = 20)
     @Column(name = "phone_number", nullable = false)
     private String phoneNumber;
 
@@ -26,10 +26,9 @@ public class Employee extends AbstractNamedEntity {
     public Employee() {
     }
 
-    public Employee(Integer id, String name, String phoneNumber, Department department) {
+    public Employee(Integer id, String name, String phoneNumber) {
         super(id, name);
         this.phoneNumber = phoneNumber;
-        this.department = department;
     }
 
     public String getPhoneNumber() {

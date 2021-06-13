@@ -32,6 +32,7 @@ public class AppExceptionHandler {
     private static final Logger log = LoggerFactory.getLogger(AppExceptionHandler.class);
 
     public static final String EXCEPTION_DUPLICATE_EMAIL = "User with this email already exists";
+    public static final String EXCEPTION_INVALID_PASSWORD = "Password length should be between 5 and 100 characters";
     public static final String EXCEPTION_DUPLICATE_DEPARTMENT = "Department with this name already exists";
     public static final String EXCEPTION_DUPLICATE_EMPLOYEE = "Employee with those name and phone number already exists";
     public static final String EXCEPTION_DUPLICATE_ALBUM = "Album with those decimal number and stamp already exists";
@@ -43,6 +44,8 @@ public class AppExceptionHandler {
             "departments_unique_name_idx", EXCEPTION_DUPLICATE_DEPARTMENT,
             "employees_unique_name_phone_number_idx", EXCEPTION_DUPLICATE_EMPLOYEE,
             "albums_unique_decimal_number_stamp_idx", EXCEPTION_DUPLICATE_ALBUM);
+
+    private static final String INVALID_PASSWORD_CONSTRAINT = "changePassword.password: size must be between 5 and 100";
 
     @ExceptionHandler(NoHandlerFoundException.class)
     public ResponseEntity<ErrorInfo> wrongRequest(HttpServletRequest req, NoHandlerFoundException e) {
@@ -78,7 +81,8 @@ public class AppExceptionHandler {
 
     @ExceptionHandler(ConstraintViolationException.class)
     public ResponseEntity<ErrorInfo> validationError(HttpServletRequest req, ConstraintViolationException e) {
-        return logAndGetErrorInfo(req, e, false, VALIDATION_ERROR, e.getMessage());
+        String details = INVALID_PASSWORD_CONSTRAINT.equals(e.getMessage()) ? EXCEPTION_INVALID_PASSWORD : e.getMessage();
+        return logAndGetErrorInfo(req, e, false, VALIDATION_ERROR, details);
     }
 
     @ExceptionHandler({IllegalRequestDataException.class, MethodArgumentTypeMismatchException.class, HttpMessageNotReadableException.class})

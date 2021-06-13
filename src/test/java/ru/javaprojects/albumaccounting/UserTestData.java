@@ -3,6 +3,7 @@ package ru.javaprojects.albumaccounting;
 import ru.javaprojects.albumaccounting.model.Role;
 import ru.javaprojects.albumaccounting.model.User;
 import ru.javaprojects.albumaccounting.to.UserTo;
+import ru.javaprojects.albumaccounting.web.json.JsonUtil;
 
 import java.util.Collections;
 import java.util.Date;
@@ -29,5 +30,9 @@ public class UserTestData {
 
     public static UserTo getUpdated() {
         return new UserTo(USER_ID, "UpdatedName", "update@gmail.com", Set.of(Role.ADMIN));
+    }
+
+    public static String jsonWithPassword(User user, String password) {
+        return JsonUtil.writeAdditionProps(user, "password", password);
     }
 }

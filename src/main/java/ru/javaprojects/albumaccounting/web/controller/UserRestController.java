@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import ru.javaprojects.albumaccounting.model.User;
@@ -24,6 +25,7 @@ import static ru.javaprojects.albumaccounting.util.ValidationUtil.checkNew;
 @RestController
 @RequestMapping(value = UserRestController.REST_URL, produces = MediaType.APPLICATION_JSON_VALUE)
 @Secured("ROLE_ADMIN")
+@Validated
 public class UserRestController {
     private final Logger log = LoggerFactory.getLogger(getClass());
     static final String REST_URL = "/api/users";
@@ -61,7 +63,7 @@ public class UserRestController {
         service.delete(id);
     }
 
-    @PutMapping(value = "{/id}", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void update(@Valid @RequestBody UserTo userTo, @PathVariable int id) {
         log.info("update {} with id={}", userTo, id);
@@ -76,7 +78,7 @@ public class UserRestController {
         service.enable(id, enabled);
     }
 
-    @PatchMapping("{/{id}/password}")
+    @PatchMapping("/{id}/password")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void changePassword(@PathVariable int id, @RequestParam @Size(min = 5, max = 100) String password) {
         log.info("change password for user {}", id);

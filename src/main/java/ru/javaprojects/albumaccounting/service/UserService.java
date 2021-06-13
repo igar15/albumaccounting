@@ -54,6 +54,7 @@ public class UserService {
 
     @Transactional
     public void changePassword(int id, String password) {
+        Assert.notNull(password, "password must not be null");
         User user = get(id);
         user.setPassword(password);
     }

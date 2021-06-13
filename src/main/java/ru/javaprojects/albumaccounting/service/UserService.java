@@ -1,6 +1,7 @@
 package ru.javaprojects.albumaccounting.service;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 import ru.javaprojects.albumaccounting.model.User;
 import ru.javaprojects.albumaccounting.repository.UserRepository;
@@ -31,7 +32,7 @@ public class UserService {
     }
 
     public List<User> getAll() {
-        return repository.findAll();
+        return repository.findAllByOrderByNameAscEmail();
     }
 
     public void delete(int id) {
@@ -43,5 +44,17 @@ public class UserService {
         Assert.notNull(user, "user must not be null");
         get(user.id());
         repository.save(user);
+    }
+
+    @Transactional
+    public void enable(int id, boolean enabled) {
+        User user = get(id);
+        user.setEnabled(enabled);
+    }
+
+    @Transactional
+    public void changePassword(int id, String password) {
+        User user = get(id);
+        user.setPassword(password);
     }
 }

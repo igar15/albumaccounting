@@ -1,5 +1,6 @@
 package ru.javaprojects.albumaccounting.service;
 
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
@@ -16,9 +17,11 @@ import static ru.javaprojects.albumaccounting.util.UserUtil.updateFromTo;
 @Service
 public class UserService {
     private final UserRepository repository;
+    private final PasswordEncoder passwordEncoder;
 
-    public UserService(UserRepository repository) {
+    public UserService(UserRepository repository, PasswordEncoder passwordEncoder) {
         this.repository = repository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     public User create(User user) {
@@ -64,6 +67,6 @@ public class UserService {
     }
 
     private User prepareAndSave(User user) {
-        return repository.save(prepareToSave(user/*, passwordEncoder*/));
+        return repository.save(prepareToSave(user, passwordEncoder));
     }
 }

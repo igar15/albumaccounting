@@ -17,6 +17,9 @@ public class UserTestData {
     public static final int ADMIN_ID = START_SEQ + 1;
     public static final int NOT_FOUND = 10;
 
+    public static final String USER_MAIL = "user@yandex.ru";
+    public static final String ADMIN_MAIL = "admin@gmail.com";
+
     public static final User user = new User(USER_ID, "User", "user@yandex.ru", "password", Role.ARCHIVE_WORKER);
     public static final User admin = new User(ADMIN_ID, "Admin", "admin@gmail.com", "admin", Role.ADMIN, Role.ARCHIVE_WORKER);
 

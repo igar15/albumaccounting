@@ -1,5 +1,6 @@
 package ru.javaprojects.albumaccounting.util;
 
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.util.StringUtils;
 import ru.javaprojects.albumaccounting.model.User;
 import ru.javaprojects.albumaccounting.to.UserTo;
@@ -20,9 +21,9 @@ public class UserUtil {
         return user;
     }
 
-    public static User prepareToSave(User user/*, PasswordEncoder passwordEncoder */) {
-//        String password = user.getPassword();
-//        user.setPassword(StringUtils.hasText(password) ? passwordEncoder.encode(password) : password);
+    public static User prepareToSave(User user, PasswordEncoder passwordEncoder) {
+        String password = user.getPassword();
+        user.setPassword(StringUtils.hasText(password) ? passwordEncoder.encode(password) : password);
         user.setEmail(user.getEmail().toLowerCase());
         return user;
     }

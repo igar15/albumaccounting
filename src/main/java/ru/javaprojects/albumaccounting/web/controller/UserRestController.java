@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import ru.javaprojects.albumaccounting.model.User;
@@ -22,6 +23,7 @@ import static ru.javaprojects.albumaccounting.util.ValidationUtil.checkNew;
 
 @RestController
 @RequestMapping(value = UserRestController.REST_URL, produces = MediaType.APPLICATION_JSON_VALUE)
+@Secured("ROLE_ADMIN")
 public class UserRestController {
     private final Logger log = LoggerFactory.getLogger(getClass());
     static final String REST_URL = "/api/users";

@@ -5,6 +5,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -24,6 +26,9 @@ public class ProfileRestController {
     @Autowired
     private UserService service;
 
+    @Autowired
+    private AuthenticationManager authenticationManager;
+
     @GetMapping
     public User get(@AuthenticationPrincipal AuthorizedUser authUser) {
         log.info("get {}", authUser.getId());
@@ -35,5 +40,12 @@ public class ProfileRestController {
     public void changePassword(@RequestParam @Size(min = 5, max = 100) String password, @AuthenticationPrincipal AuthorizedUser authUser) {
         log.info("change password for user {}", authUser.getId());
         service.changePassword(authUser.getId(), password);
+    }
+
+    @PostMapping("/login")
+    public User login(@RequestParam String email, @RequestParam String password) {
+        log.info("login user {}", email);
+        authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(email.toLowerCase(), password));
+        return service.getByEmail(email.toLowerCase());
     }
 }

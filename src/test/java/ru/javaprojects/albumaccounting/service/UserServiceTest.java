@@ -5,6 +5,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import ru.javaprojects.albumaccounting.model.Role;
 import ru.javaprojects.albumaccounting.model.User;
+import ru.javaprojects.albumaccounting.to.UserTo;
+import ru.javaprojects.albumaccounting.util.UserUtil;
 import ru.javaprojects.albumaccounting.util.exception.NotFoundException;
 
 import javax.validation.ConstraintViolationException;
@@ -74,14 +76,14 @@ class UserServiceTest extends AbstractServiceTest {
 
     @Test
     void update() {
-        User updated = getUpdated();
+        UserTo updated = getUpdated();
         service.update(updated);
-        USER_MATCHER.assertMatch(service.get(USER_ID), getUpdated());
+        USER_MATCHER.assertMatch(service.get(USER_ID), UserUtil.updateFromTo(new User(user), getUpdated()));
     }
 
     @Test
     void updateNotFound() {
-        User updated = getUpdated();
+        UserTo updated = getUpdated();
         updated.setId(NOT_FOUND);
         assertThrows(NotFoundException.class, () -> service.update(updated));
     }

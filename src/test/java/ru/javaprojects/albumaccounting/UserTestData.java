@@ -2,10 +2,11 @@ package ru.javaprojects.albumaccounting;
 
 import ru.javaprojects.albumaccounting.model.Role;
 import ru.javaprojects.albumaccounting.model.User;
+import ru.javaprojects.albumaccounting.to.UserTo;
 
 import java.util.Collections;
 import java.util.Date;
-import java.util.List;
+import java.util.Set;
 
 import static ru.javaprojects.albumaccounting.model.AbstractBaseEntity.START_SEQ;
 
@@ -23,13 +24,7 @@ public class UserTestData {
         return new User(null, "New", "new@gmail.com", "newPass", false, new Date(), Collections.singleton(Role.ARCHIVE_WORKER));
     }
 
-    public static User getUpdated() {
-        User updated = new User(UserTestData.user);
-        updated.setEmail("update@gmail.com");
-        updated.setName("UpdatedName");
-        updated.setPassword("newPass");
-        updated.setEnabled(false);
-        updated.setRoles(List.of(Role.ADMIN));
-        return updated;
+    public static UserTo getUpdated() {
+        return new UserTo(USER_ID, "UpdatedName", "update@gmail.com", Set.of(Role.ADMIN));
     }
 }

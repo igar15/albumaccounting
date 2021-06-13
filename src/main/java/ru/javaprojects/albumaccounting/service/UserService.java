@@ -5,9 +5,13 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 import ru.javaprojects.albumaccounting.model.User;
 import ru.javaprojects.albumaccounting.repository.UserRepository;
+import ru.javaprojects.albumaccounting.to.UserTo;
 import ru.javaprojects.albumaccounting.util.exception.NotFoundException;
 
 import java.util.List;
+
+import static ru.javaprojects.albumaccounting.util.UserUtil.prepareToSave;
+import static ru.javaprojects.albumaccounting.util.UserUtil.updateFromTo;
 
 @Service
 public class UserService {
@@ -19,8 +23,7 @@ public class UserService {
 
     public User create(User user) {
         Assert.notNull(user, "user must not be null");
-        user.setEmail(user.getEmail().toLowerCase());
-        return repository.save(user);
+        return prepareAndSave(user);
     }
 
     public User get(int id) {
@@ -40,10 +43,11 @@ public class UserService {
         repository.delete(user);
     }
 
-    public void update(User user) {
-        Assert.notNull(user, "user must not be null");
-        get(user.id());
-        repository.save(user);
+    @Transactional
+    public void update(UserTo userTo) {
+        Assert.notNull(userTo, "userTo must not be null");
+        User user = get(userTo.id());
+        prepareAndSave(updateFromTo(user, userTo));
     }
 
     @Transactional
@@ -57,5 +61,9 @@ public class UserService {
         Assert.notNull(password, "password must not be null");
         User user = get(id);
         user.setPassword(password);
+    }
+
+    private User prepareAndSave(User user) {
+        return repository.save(prepareToSave(user/*, passwordEncoder*/));
     }
 }

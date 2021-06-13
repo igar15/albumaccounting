@@ -18,6 +18,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import ru.javaprojects.albumaccounting.AuthorizedUser;
 import ru.javaprojects.albumaccounting.model.User;
 import ru.javaprojects.albumaccounting.repository.UserRepository;
+import ru.javaprojects.albumaccounting.web.RestAccessDeniedHandler;
+import ru.javaprojects.albumaccounting.web.RestAuthenticationEntryPoint;
 
 
 @Configuration
@@ -27,6 +29,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private RestAuthenticationEntryPoint restAuthenticationEntryPoint;
+
+    @Autowired
+    private RestAccessDeniedHandler restAccessDeniedHandler;
 
     @Bean
     public UserDetailsService userDetailsService() {
@@ -61,7 +69,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .authorizeRequests()
-                .antMatchers("/api/profile/register").anonymous()
+//                .antMatchers("/api/profile/register").anonymous()
                 .antMatchers("/api/profile/login").permitAll()
 //                .antMatchers(HttpMethod.GET, "/rest/restaurants/**").permitAll()
 //                .antMatchers("/swagger-ui.html").permitAll()
@@ -70,9 +78,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 //                .antMatchers("/webjars/**").permitAll()
                 .anyRequest().authenticated()
                 .and()
-                .httpBasic();
-//                .authenticationEntryPoint(restAuthenticationEntryPoint)
-//                .and()
-//                .exceptionHandling().accessDeniedHandler(restAccessDeniedHandler);
+                .httpBasic()
+                .authenticationEntryPoint(restAuthenticationEntryPoint)
+                .and()
+                .exceptionHandling().accessDeniedHandler(restAccessDeniedHandler);
     }
 }

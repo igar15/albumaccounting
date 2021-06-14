@@ -1,5 +1,5 @@
-[![Codacy Badge](https://app.codacy.com/project/badge/Grade/ddae95adbea54bed8afcc56f40b906ff)](https://www.codacy.com/gh/igar15/album-accounting/dashboard)
-[![Build Status](https://api.travis-ci.com/igar15/album-accounting.svg?branch=master)](https://travis-ci.com//igar15/album-accounting)
+[![Codacy Badge](https://app.codacy.com/project/badge/Grade/e99d6883f16949cf967a1f52b341580a)](https://www.codacy.com/gh/igar15/albumaccounting/dashboard)
+[![Build Status](https://api.travis-ci.com/igar15/albumaccounting.svg?branch=master)](https://travis-ci.com//igar15/albumaccounting)
 
 Album accounting system project 
 =================================
@@ -32,34 +32,36 @@ This is the REST API implementation of constructor documentation album accountin
 - (/v2/api-docs)
 - (/swagger-ui.html)
 #### Users
-- GET /rest/users (get all users)
-- GET /rest/users/{userId} (get user with id = userId)
-- POST /rest/users (create a new user)
-- PUT /rest/users/{userId} (update user with id = userId)
-- PATCH /rest/users/{userId}?enabled={enabledValue} (change user's enabled status to enabledValue for user with id = userId)
-- DELETE /rest/users/{userId} (delete user with id = userId)
+- GET /api/users (get all users)
+- GET /api/users/{userId} (get user with id = userId)
+- POST /api/users (create a new user)
+- PUT /api/users/{userId} (update user with id = userId)
+- PATCH /api/users/{userId}?enabled={enabledValue} (change user's enabled status to enabledValue for user with id = userId)
+- PATCH /api/users/{userId}/password?password={password} (change user's password to 'password' request param for user with id = userId)
+- DELETE /api/users/{userId} (delete user with id = userId)
 
-- GET /rest/profile (get user profile)
-- PUT /rest/profile/password (update user profile password)
+- GET /api/profile (get user profile)
+- PUT /api/profile/password (change user profile password)
+- PUT /api/profile/login (login to application)
 #### Departments
-- POST /rest/departments (create a new department)
-- GET /rest/departments (get list of departments)
-- GET /rest/departments/{departmentId} (get department with id = departmentId)
-- PUT /rest/departments/{departmentId} (update department with id = departmentId)
-- DELETE /rest/departments/{departmentId} (delete department with id = departmentId)
+- POST /api/departments (create a new department)
+- GET /api/departments (get list of departments)
+- GET /api/departments/{departmentId} (get department with id = departmentId)
+- PUT /api/departments/{departmentId} (update department with id = departmentId)
+- DELETE /api/departments/{departmentId} (delete department with id = departmentId)
 #### Employees
-- POST /rest/departments/{departmentId}/employees (create a new employee for department with id = departmentId)
-- GET /rest/departments/{departmentId}/employees (get all employees for department with id = departmentId)
-- GET /rest/employees/{employeeId} (get employee with id = employeeId)
-- PUT /rest/employees/{employeeId} (update employee with id = employeeId)
-- DELETE /rest/employees/{employeeId} (delete employee with id = employeeId)
+- POST /api/employees (create a new employee)
+- GET /api/departments/{departmentId}/employees (get all employees for department with id = departmentId)
+- GET /api/employees/{employeeId} (get employee with id = employeeId)
+- PUT /api/employees/{employeeId} (update employee with id = employeeId)
+- DELETE /api/employees/{employeeId} (delete employee with id = employeeId)
 #### Albums
-- POST /rest/albums (create a new album)
-- GET /rest/albums (get list of albums)
-- GET /rest/albums/{albumId} (get album with id = albumId)
-- PUT /rest/albums/{albumId} (update album with id = albumId)
-- PATCH /rest/albums/{albumId}?employeeId={employeeId} (change album's handler to employee with id = employeeId)
-- DELETE /rest/albums/{albumId} (delete album with id = albumId)
+- POST /api/albums (create a new album)
+- GET /api/albums (get list of albums)
+- GET /api/albums/{albumId} (get album with id = albumId)
+- PUT /api/albums/{albumId} (update album with id = albumId)
+- PATCH /api/albums/{albumId}?employeeId={employeeId} (change album's handler to employee with id = employeeId)
+- DELETE /api/albums/{albumId} (delete album with id = albumId)
 
 ### Caching strategy
 

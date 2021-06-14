@@ -36,6 +36,7 @@ public class AppExceptionHandler {
     public static final String EXCEPTION_DUPLICATE_DEPARTMENT = "Department with this name already exists";
     public static final String EXCEPTION_DUPLICATE_EMPLOYEE = "Employee with those name and phone number already exists";
     public static final String EXCEPTION_DUPLICATE_ALBUM = "Album with those decimal number and stamp already exists";
+    public static final String EXCEPTION_HOLDER_HAS_ALBUMS = "Cannot delete because employee has albums";
     public static final String EXCEPTION_ACCESS_DENIED = "You do not have enough permission";
     public static final String EXCEPTION_BAD_CREDENTIALS = "Email / password incorrect. Please try again";
 
@@ -43,7 +44,8 @@ public class AppExceptionHandler {
             "users_unique_email_idx", EXCEPTION_DUPLICATE_EMAIL,
             "departments_unique_name_idx", EXCEPTION_DUPLICATE_DEPARTMENT,
             "employees_unique_name_phone_number_idx", EXCEPTION_DUPLICATE_EMPLOYEE,
-            "albums_unique_decimal_number_stamp_idx", EXCEPTION_DUPLICATE_ALBUM);
+            "albums_unique_decimal_number_stamp_idx", EXCEPTION_DUPLICATE_ALBUM,
+            "albums_holder_id_fkey", EXCEPTION_HOLDER_HAS_ALBUMS);
 
     private static final String INVALID_PASSWORD_CONSTRAINT = "changePassword.password: size must be between 5 and 100";
 

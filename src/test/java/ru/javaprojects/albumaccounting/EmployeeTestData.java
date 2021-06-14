@@ -1,7 +1,9 @@
 package ru.javaprojects.albumaccounting;
 
 import ru.javaprojects.albumaccounting.model.Employee;
+import ru.javaprojects.albumaccounting.to.EmployeeTo;
 
+import static ru.javaprojects.albumaccounting.DepartmentTestData.DEPARTMENT_1_ID;
 import static ru.javaprojects.albumaccounting.model.AbstractBaseEntity.START_SEQ;
 
 public class EmployeeTestData {
@@ -20,7 +22,15 @@ public class EmployeeTestData {
         return new Employee(null, "NewName", "NewPhoneNumber");
     }
 
+    public static EmployeeTo getNewTo() {
+        return new EmployeeTo(null, "NewName", "NewPhoneNumber", DEPARTMENT_1_ID);
+    }
+
     public static Employee getUpdated() {
         return new Employee(EMPLOYEE_1_ID, "UpdatedName", "UpdatedPhoneNumber");
+    }
+
+    public static EmployeeTo getUpdatedTo() {
+        return new EmployeeTo(EMPLOYEE_1_ID, "UpdatedName", "UpdatedPhoneNumber", DEPARTMENT_1_ID);
     }
 }

@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import ru.javaprojects.albumaccounting.model.Employee;
 import ru.javaprojects.albumaccounting.repository.EmployeeRepository;
+import ru.javaprojects.albumaccounting.to.EmployeeTo;
 import ru.javaprojects.albumaccounting.util.exception.NotFoundException;
 
 import javax.validation.ConstraintViolationException;
@@ -27,7 +28,7 @@ class EmployeeServiceTest extends AbstractServiceTest {
 
     @Test
     void create() {
-        Employee created = service.create(getNew(), DEPARTMENT_1_ID);
+        Employee created = service.create(getNewTo());
         int newId = created.id();
         Employee newEmployee = getNew();
         newEmployee.setId(newId);
@@ -36,8 +37,15 @@ class EmployeeServiceTest extends AbstractServiceTest {
     }
 
     @Test
+    void createBadDepartment() {
+        EmployeeTo newEmployeeTo = getNewTo();
+        newEmployeeTo.setDepartmentId(NOT_FOUND);
+        assertThrows(NotFoundException.class, () -> service.create(newEmployeeTo));
+    }
+
+    @Test
     void duplicateNamePhoneNumberCreate() {
-        assertThrows(DataAccessException.class, () -> service.create(new Employee(null, "Naumkin A.", "1-31-65"), DEPARTMENT_1_ID));
+        assertThrows(DataAccessException.class, () -> service.create(new EmployeeTo(null, "Naumkin A.", "1-31-65", DEPARTMENT_1_ID)));
     }
 
     @Test
@@ -80,25 +88,29 @@ class EmployeeServiceTest extends AbstractServiceTest {
 
     @Test
     void update() {
-        service.update(getUpdated(), DEPARTMENT_1_ID);
+        service.update(getUpdatedTo());
         EMPLOYEE_MATCHER.assertMatch(service.get(EMPLOYEE_1_ID), getUpdated());
     }
 
     @Test
     void updateNotFound() {
-        Employee updated = getUpdated();
-        updated.setId(NOT_FOUND);
-        assertThrows(NotFoundException.class, () -> service.update(updated, DEPARTMENT_1_ID));
+        EmployeeTo updatedTo = getUpdatedTo();
+        updatedTo.setId(NOT_FOUND);
+        assertThrows(NotFoundException.class, () -> service.update(updatedTo));
     }
 
     @Test
     void updateBadDepartment() {
-        assertThrows(NotFoundException.class, () -> service.update(getUpdated(), NOT_FOUND));
+        EmployeeTo updatedTo = getUpdatedTo();
+        updatedTo.setDepartmentId(NOT_FOUND);
+        assertThrows(NotFoundException.class, () -> service.update(updatedTo));
     }
 
     @Test
     void updateChangeDepartment() {
-        service.update(getUpdated(), DEPARTMENT_2_ID);
+        EmployeeTo updatedTo = getUpdatedTo();
+        updatedTo.setDepartmentId(DEPARTMENT_2_ID);
+        service.update(updatedTo);
         Employee employee = repository.findByIdWithDepartment(EMPLOYEE_1_ID);
         EMPLOYEE_MATCHER.assertMatch(employee, getUpdated());
         DEPARTMENT_MATCHER.assertMatch(employee.getDepartment(), department2);
@@ -106,8 +118,8 @@ class EmployeeServiceTest extends AbstractServiceTest {
 
     @Test
     void createWithException() {
-        validateRootCause(ConstraintViolationException.class, () -> service.create(new Employee(null, " ", "1-77-77"), DEPARTMENT_1_ID));
-        validateRootCause(ConstraintViolationException.class, () -> service.create(new Employee(null, "newName", " "), DEPARTMENT_1_ID));
-        validateRootCause(ConstraintViolationException.class, () -> service.create(new Employee(null, "newName", "7777"), DEPARTMENT_1_ID));
+        validateRootCause(ConstraintViolationException.class, () -> service.create(new EmployeeTo(null, " ", "1-77-77", DEPARTMENT_1_ID)));
+        validateRootCause(ConstraintViolationException.class, () -> service.create(new EmployeeTo(null, "newName", " ", DEPARTMENT_1_ID)));
+        validateRootCause(ConstraintViolationException.class, () -> service.create(new EmployeeTo(null, "newName", "7777", DEPARTMENT_1_ID)));
     }
 }

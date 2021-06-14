@@ -6,10 +6,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import ru.javaprojects.albumaccounting.model.Employee;
 import ru.javaprojects.albumaccounting.service.EmployeeService;
+import ru.javaprojects.albumaccounting.to.EmployeeTo;
 
 import javax.validation.Valid;
 import java.net.URI;
@@ -20,6 +22,7 @@ import static ru.javaprojects.albumaccounting.util.ValidationUtil.checkNew;
 
 @RestController
 @RequestMapping(value = EmployeeRestController.REST_URL, produces = MediaType.APPLICATION_JSON_VALUE)
+@Secured({"ROLE_ARCHIVE_WORKER", "ROLE_ADMIN"})
 public class EmployeeRestController {
     private final Logger log = LoggerFactory.getLogger(getClass());
     static final String REST_URL = "/api";
@@ -46,11 +49,11 @@ public class EmployeeRestController {
         service.delete(id);
     }
 
-    @PostMapping(value = "/departments/{departmentId}/employees", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Employee> createWithLocation(@PathVariable int departmentId, @Valid @RequestBody Employee employee) {
-        log.info("create {} for department {}", employee, departmentId);
-        checkNew(employee);
-        Employee created = service.create(employee, departmentId);
+    @PostMapping(value = "/employees", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Employee> createWithLocation(@Valid @RequestBody EmployeeTo employeeTo) {
+        log.info("create {} for department {}", employeeTo, employeeTo.getDepartmentId());
+        checkNew(employeeTo);
+        Employee created = service.create(employeeTo);
         URI uriOfNewResource = ServletUriComponentsBuilder.fromCurrentContextPath()
                 .path(REST_URL + "/employees/{id}")
                 .buildAndExpand(created.getId()).toUri();
@@ -59,9 +62,9 @@ public class EmployeeRestController {
 
     @PutMapping(value = "/employees/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void update(@Valid @RequestBody Employee employee, @PathVariable int id, @RequestParam int departmentId) {
-        log.info("update {} with id={}", employee, id);
-        assureIdConsistent(employee, id);
-        service.update(employee, departmentId);
+    public void update(@Valid @RequestBody EmployeeTo employeeTo, @PathVariable int id) {
+        log.info("update {} with id={}", employeeTo, id);
+        assureIdConsistent(employeeTo, id);
+        service.update(employeeTo);
     }
 }

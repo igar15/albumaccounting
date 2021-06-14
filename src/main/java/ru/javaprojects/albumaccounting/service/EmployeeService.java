@@ -6,9 +6,13 @@ import org.springframework.util.Assert;
 import ru.javaprojects.albumaccounting.model.Department;
 import ru.javaprojects.albumaccounting.model.Employee;
 import ru.javaprojects.albumaccounting.repository.EmployeeRepository;
+import ru.javaprojects.albumaccounting.to.EmployeeTo;
 import ru.javaprojects.albumaccounting.util.exception.NotFoundException;
 
 import java.util.List;
+
+import static ru.javaprojects.albumaccounting.util.EmployeeUtil.createFromTo;
+import static ru.javaprojects.albumaccounting.util.EmployeeUtil.updateFromTo;
 
 @Service
 public class EmployeeService {
@@ -22,9 +26,10 @@ public class EmployeeService {
     }
 
     @Transactional
-    public Employee create(Employee employee, int departmentId) {
-        Assert.notNull(employee, "employee must not be null");
-        Department department = departmentService.get(departmentId);
+    public Employee create(EmployeeTo employeeTo) {
+        Assert.notNull(employeeTo, "employeeTo must not be null");
+        Department department = departmentService.get(employeeTo.getDepartmentId());
+        Employee employee = createFromTo(employeeTo);
         employee.setDepartment(department);
         return repository.save(employee);
     }
@@ -44,11 +49,11 @@ public class EmployeeService {
     }
 
     @Transactional
-    public void update(Employee employee, int departmentId) {
-        Assert.notNull(employee, "employee must not be null");
-        get(employee.id());
-        Department department = departmentService.get(departmentId);
+    public void update(EmployeeTo employeeTo) {
+        Assert.notNull(employeeTo, "employeeTo must not be null");
+        Employee employee = get(employeeTo.getId());
+        Department department = departmentService.get(employeeTo.getDepartmentId());
+        updateFromTo(employee, employeeTo);
         employee.setDepartment(department);
-        repository.save(employee);
     }
 }

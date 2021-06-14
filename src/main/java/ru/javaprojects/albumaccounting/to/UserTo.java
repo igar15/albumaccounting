@@ -26,7 +26,6 @@ public class UserTo implements HasId, Serializable {
     @Size(max = 100)
     private String email;
 
-
     @NotEmpty
     private Set<Role> roles;
 

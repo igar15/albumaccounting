@@ -2,9 +2,11 @@ package ru.javaprojects.albumaccounting;
 
 import org.springframework.data.domain.*;
 import ru.javaprojects.albumaccounting.model.Album;
+import ru.javaprojects.albumaccounting.to.AlbumTo;
 
 import java.util.List;
 
+import static ru.javaprojects.albumaccounting.EmployeeTestData.EMPLOYEE_1_ID;
 import static ru.javaprojects.albumaccounting.model.AbstractBaseEntity.START_SEQ;
 import static ru.javaprojects.albumaccounting.model.Stamp.II_STAMP;
 import static ru.javaprojects.albumaccounting.model.Stamp.I_STAMP;
@@ -30,7 +32,15 @@ public class AlbumTestData {
         return new Album(null, "NewDecimalNumber", I_STAMP);
     }
 
+    public static AlbumTo getNewTo() {
+        return new AlbumTo(null, "NewDecimalNumber", I_STAMP, EMPLOYEE_1_ID);
+    }
+
     public static Album getUpdated() {
         return new Album(ALBUM_1_ID, "UpdatedDecimalNumber", II_STAMP);
+    }
+
+    public static AlbumTo getUpdatedTo() {
+        return new AlbumTo(ALBUM_1_ID, "UpdatedDecimalNumber", II_STAMP, EMPLOYEE_1_ID);
     }
 }

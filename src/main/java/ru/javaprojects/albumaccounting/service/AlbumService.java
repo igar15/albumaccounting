@@ -8,7 +8,11 @@ import org.springframework.util.Assert;
 import ru.javaprojects.albumaccounting.model.Album;
 import ru.javaprojects.albumaccounting.model.Employee;
 import ru.javaprojects.albumaccounting.repository.AlbumRepository;
+import ru.javaprojects.albumaccounting.to.AlbumTo;
 import ru.javaprojects.albumaccounting.util.exception.NotFoundException;
+
+import static ru.javaprojects.albumaccounting.util.AlbumUtil.createFromTo;
+import static ru.javaprojects.albumaccounting.util.AlbumUtil.updateFromTo;
 
 @Service
 public class AlbumService {
@@ -21,9 +25,10 @@ public class AlbumService {
     }
 
     @Transactional
-    public Album create(Album album, int holderId) {
-        Assert.notNull(album, "album must not be null");
-        Employee holder = employeeService.get(holderId);
+    public Album create(AlbumTo albumTo) {
+        Assert.notNull(albumTo, "albumTo must not be null");
+        Employee holder = employeeService.get(albumTo.getHolderId());
+        Album album = createFromTo(albumTo);
         album.setHolder(holder);
         return repository.save(album);
     }
@@ -43,11 +48,11 @@ public class AlbumService {
     }
 
     @Transactional
-    public void update(Album album, int holderId) {
-        Assert.notNull(album, "album must not be null");
-        get(album.id());
-        Employee holder = employeeService.get(holderId);
+    public void update(AlbumTo albumTo) {
+        Assert.notNull(albumTo, "albumTo must not be null");
+        Album album = get(albumTo.getId());
+        Employee holder = employeeService.get(albumTo.getHolderId());
+        updateFromTo(album, albumTo);
         album.setHolder(holder);
-        repository.save(album);
     }
 }

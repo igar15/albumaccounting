@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.data.domain.Page;
 import ru.javaprojects.albumaccounting.model.Album;
+import ru.javaprojects.albumaccounting.to.AlbumTo;
 import ru.javaprojects.albumaccounting.util.exception.NotFoundException;
 
 import javax.validation.ConstraintViolationException;
@@ -13,7 +14,9 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static ru.javaprojects.albumaccounting.AlbumTestData.getNew;
+import static ru.javaprojects.albumaccounting.AlbumTestData.getNewTo;
 import static ru.javaprojects.albumaccounting.AlbumTestData.getUpdated;
+import static ru.javaprojects.albumaccounting.AlbumTestData.getUpdatedTo;
 import static ru.javaprojects.albumaccounting.AlbumTestData.*;
 import static ru.javaprojects.albumaccounting.EmployeeTestData.NOT_FOUND;
 import static ru.javaprojects.albumaccounting.EmployeeTestData.*;
@@ -26,7 +29,7 @@ class AlbumServiceTest extends AbstractServiceTest {
 
     @Test
     void create() {
-        Album created = service.create(getNew(), EMPLOYEE_1_ID);
+        Album created = service.create(getNewTo());
         int newId = created.id();
         Album newAlbum = getNew();
         newAlbum.setId(newId);
@@ -36,7 +39,7 @@ class AlbumServiceTest extends AbstractServiceTest {
 
     @Test
     void duplicateDecimalNumberStampCreate() {
-        assertThrows(DataAccessException.class, () -> service.create(new Album(null, "ВУИА.444444.005", I_STAMP), EMPLOYEE_1_ID));
+        assertThrows(DataAccessException.class, () -> service.create(new AlbumTo(null, "ВУИА.444444.005", I_STAMP, EMPLOYEE_1_ID)));
     }
 
     @Test
@@ -71,20 +74,22 @@ class AlbumServiceTest extends AbstractServiceTest {
 
     @Test
     void update() {
-        service.update(getUpdated(), EMPLOYEE_1_ID);
+        service.update(getUpdatedTo());
         ALBUM_MATCHER.assertMatch(service.get(ALBUM_1_ID), getUpdated());
     }
 
     @Test
     void updateNotFound() {
-        Album updated = getUpdated();
-        updated.setId(NOT_FOUND);
-        assertThrows(NotFoundException.class, () -> service.update(updated, EMPLOYEE_1_ID));
+        AlbumTo updatedTo = getUpdatedTo();
+        updatedTo.setId(NOT_FOUND);
+        assertThrows(NotFoundException.class, () -> service.update(updatedTo));
     }
 
     @Test
     void updateChangeHolder() {
-        service.update(getUpdated(), EMPLOYEE_2_ID);
+        AlbumTo updatedTo = getUpdatedTo();
+        updatedTo.setHolderId(EMPLOYEE_2_ID);
+        service.update(updatedTo);
         Album updated = service.get(ALBUM_1_ID);
         ALBUM_MATCHER.assertMatch(updated, getUpdated());
         EMPLOYEE_MATCHER.assertMatch(updated.getHolder(), employee2);
@@ -92,8 +97,8 @@ class AlbumServiceTest extends AbstractServiceTest {
 
     @Test
     void createWithException() {
-        validateRootCause(ConstraintViolationException.class, () -> service.create(new Album(null, " ", I_STAMP), EMPLOYEE_1_ID));
-        validateRootCause(ConstraintViolationException.class, () -> service.create(new Album(null, "VUIA.4444", I_STAMP), EMPLOYEE_1_ID));
-        validateRootCause(ConstraintViolationException.class, () -> service.create(new Album(null, "VUIA.444444.001", null), EMPLOYEE_1_ID));
+        validateRootCause(ConstraintViolationException.class, () -> service.create(new AlbumTo(null, " ", I_STAMP, EMPLOYEE_1_ID)));
+        validateRootCause(ConstraintViolationException.class, () -> service.create(new AlbumTo(null, "VUIA.4444", I_STAMP, EMPLOYEE_1_ID)));
+        validateRootCause(ConstraintViolationException.class, () -> service.create(new AlbumTo(null, "VUIA.444444.001", null, EMPLOYEE_1_ID)));
     }
 }

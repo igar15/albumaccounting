@@ -1,5 +1,10 @@
 package ru.javaprojects.albumaccounting.web.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.security.SecurityRequirements;
+import io.swagger.v3.oas.annotations.security.SecurityScheme;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +24,7 @@ import javax.validation.constraints.Size;
 @RestController
 @RequestMapping(value = ProfileRestController.REST_URL, produces = MediaType.APPLICATION_JSON_VALUE)
 @Validated
+@Tag(name = "Profile Controller")
 public class ProfileRestController {
     private final Logger log = LoggerFactory.getLogger(getClass());
     static final String REST_URL = "/api/profile";
@@ -29,12 +35,14 @@ public class ProfileRestController {
     @Autowired
     private AuthenticationManager authenticationManager;
 
+    @Operation(description = "Get user profile data")
     @GetMapping
     public User get(@AuthenticationPrincipal AuthorizedUser authUser) {
         log.info("get {}", authUser.getId());
         return service.get(authUser.getId());
     }
 
+    @Operation(description = "Change user profile password")
     @PatchMapping("/password")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void changePassword(@RequestParam @Size(min = 5, max = 100) String password, @AuthenticationPrincipal AuthorizedUser authUser) {
@@ -42,6 +50,8 @@ public class ProfileRestController {
         service.changePassword(authUser.getId(), password);
     }
 
+    @Operation(description = "Login to app")
+    @SecurityRequirements
     @PostMapping("/login")
     public User login(@RequestParam String email, @RequestParam String password) {
         log.info("login user {}", email);

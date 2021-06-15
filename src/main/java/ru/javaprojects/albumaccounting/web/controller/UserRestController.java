@@ -1,5 +1,7 @@
 package ru.javaprojects.albumaccounting.web.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +28,7 @@ import static ru.javaprojects.albumaccounting.util.ValidationUtil.checkNew;
 @RequestMapping(value = UserRestController.REST_URL, produces = MediaType.APPLICATION_JSON_VALUE)
 @Secured("ROLE_ADMIN")
 @Validated
+@Tag(name = "User Controller (Admin only)")
 public class UserRestController {
     private final Logger log = LoggerFactory.getLogger(getClass());
     static final String REST_URL = "/api/users";
@@ -33,18 +36,21 @@ public class UserRestController {
     @Autowired
     private UserService service;
 
+    @Operation(description = "Get all users (Admin only)")
     @GetMapping
     public List<User> getAll() {
         log.info("getAll");
         return service.getAll();
     }
 
+    @Operation(description = "Get user (Admin only)")
     @GetMapping("/{id}")
     public User get(@PathVariable int id) {
         log.info("get {}", id);
         return service.get(id);
     }
 
+    @Operation(description = "Create new user (Admin only)")
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<User> createWithLocation(@Valid @RequestBody User user) {
         log.info("create {}", user);
@@ -56,6 +62,7 @@ public class UserRestController {
         return ResponseEntity.created(uriOfNewResource).body(created);
     }
 
+    @Operation(description = "Delete user (Admin only)")
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete(@PathVariable int id) {
@@ -63,6 +70,7 @@ public class UserRestController {
         service.delete(id);
     }
 
+    @Operation(description = "Update user (Admin only)")
     @PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void update(@Valid @RequestBody UserTo userTo, @PathVariable int id) {
@@ -71,6 +79,7 @@ public class UserRestController {
         service.update(userTo);
     }
 
+    @Operation(description = "Enable/Disable user (Admin only)")
     @PatchMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void enable(@PathVariable int id, @RequestParam boolean enabled) {
@@ -78,6 +87,7 @@ public class UserRestController {
         service.enable(id, enabled);
     }
 
+    @Operation(description = "Change user's password (Admin only)")
     @PatchMapping("/{id}/password")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void changePassword(@PathVariable int id, @RequestParam @Size(min = 5, max = 100) String password) {

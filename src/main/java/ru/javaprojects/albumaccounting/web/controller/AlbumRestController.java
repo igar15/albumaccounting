@@ -1,5 +1,8 @@
 package ru.javaprojects.albumaccounting.web.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirements;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +26,7 @@ import static ru.javaprojects.albumaccounting.util.ValidationUtil.checkNew;
 
 @RestController
 @RequestMapping(value = AlbumRestController.REST_URL, produces = MediaType.APPLICATION_JSON_VALUE)
+@Tag(name = "Album Controller")
 public class AlbumRestController {
     private final Logger log = LoggerFactory.getLogger(getClass());
     static final String REST_URL = "/api/albums";
@@ -30,18 +34,23 @@ public class AlbumRestController {
     @Autowired
     private AlbumService service;
 
+    @Operation(description = "Get page with albums")
+    @SecurityRequirements
     @GetMapping
     public Page<Album> getAll(Pageable pageable) {
         log.info("getAll (pageNumber={}, pageSize={})", pageable.getPageNumber(), pageable.getPageSize());
         return service.getAll(pageable);
     }
 
+    @Operation(description = "Get album")
+    @SecurityRequirements
     @GetMapping("/{id}")
     public Album get(@PathVariable int id) {
         log.info("get {}", id);
         return service.get(id);
     }
 
+    @Operation(description = "Delete album")
     @Secured({"ROLE_ARCHIVE_WORKER", "ROLE_ADMIN"})
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
@@ -50,6 +59,7 @@ public class AlbumRestController {
         service.delete(id);
     }
 
+    @Operation(description = "Create new album")
     @Secured({"ROLE_ARCHIVE_WORKER", "ROLE_ADMIN"})
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Album> createWithLocation(@Valid @RequestBody AlbumTo albumTo) {
@@ -62,6 +72,7 @@ public class AlbumRestController {
         return ResponseEntity.created(uriOfNewResource).body(created);
     }
 
+    @Operation(description = "Update album")
     @Secured({"ROLE_ARCHIVE_WORKER", "ROLE_ADMIN"})
     @PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.NO_CONTENT)

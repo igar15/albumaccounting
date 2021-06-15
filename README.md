@@ -29,7 +29,7 @@ This is the REST API implementation of constructor documentation album accountin
 
 ### API documentation:
 #### Swagger documentation
-- (/v2/api-docs)
+- (/v3/api-docs)
 - (/swagger-ui.html)
 #### Users
 - GET /api/users (get all users)

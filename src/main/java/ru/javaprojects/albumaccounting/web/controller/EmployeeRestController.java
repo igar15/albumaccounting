@@ -1,5 +1,7 @@
 package ru.javaprojects.albumaccounting.web.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +25,7 @@ import static ru.javaprojects.albumaccounting.util.ValidationUtil.checkNew;
 @RestController
 @RequestMapping(value = EmployeeRestController.REST_URL, produces = MediaType.APPLICATION_JSON_VALUE)
 @Secured({"ROLE_ARCHIVE_WORKER", "ROLE_ADMIN"})
+@Tag(name = "Employee Controller")
 public class EmployeeRestController {
     private final Logger log = LoggerFactory.getLogger(getClass());
     static final String REST_URL = "/api";
@@ -30,18 +33,21 @@ public class EmployeeRestController {
     @Autowired
     private EmployeeService service;
 
+    @Operation(description = "Get all employees for department")
     @GetMapping("/departments/{departmentId}/employees")
     public List<Employee> getAll(@PathVariable int departmentId) {
         log.info("getAll for department {}", departmentId);
         return service.getAllByDepartmentId(departmentId);
     }
 
+    @Operation(description = "Get employee")
     @GetMapping("/employees/{id}")
     public Employee get(@PathVariable int id) {
         log.info("get {}", id);
         return service.get(id);
     }
 
+    @Operation(description = "Delete employee")
     @DeleteMapping("/employees/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete(@PathVariable int id) {
@@ -49,6 +55,7 @@ public class EmployeeRestController {
         service.delete(id);
     }
 
+    @Operation(description = "Create new employee")
     @PostMapping(value = "/employees", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Employee> createWithLocation(@Valid @RequestBody EmployeeTo employeeTo) {
         log.info("create {}", employeeTo);
@@ -60,6 +67,7 @@ public class EmployeeRestController {
         return ResponseEntity.created(uriOfNewResource).body(created);
     }
 
+    @Operation(description = "Update employee")
     @PutMapping(value = "/employees/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void update(@Valid @RequestBody EmployeeTo employeeTo, @PathVariable int id) {

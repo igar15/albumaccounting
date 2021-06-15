@@ -9,7 +9,6 @@ import org.springframework.stereotype.Component;
 import ru.javaprojects.albumaccounting.util.exception.ErrorInfo;
 import ru.javaprojects.albumaccounting.web.json.JacksonObjectMapper;
 
-import javax.servlet.ServletException;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;

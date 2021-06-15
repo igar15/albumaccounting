@@ -2,8 +2,6 @@ package ru.javaprojects.albumaccounting;
 
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.ResultActions;
-import org.springframework.test.web.servlet.request.RequestPostProcessor;
-import ru.javaprojects.albumaccounting.model.User;
 import ru.javaprojects.albumaccounting.web.json.JsonUtil;
 
 import java.io.UnsupportedEncodingException;
@@ -28,8 +26,4 @@ public class TestUtil {
     public static <T> List<T> readListFromJsonMvcResult(MvcResult result, Class<T> clazz) throws UnsupportedEncodingException {
         return JsonUtil.readValues(getContent(result), clazz);
     }
-
-//    public static RequestPostProcessor userHttpBasic(User user) {
-//        return SecurityMockMvcRequestPostProcessors.httpBasic(user.getEmail(), user.getPassword());
-//    }
 }

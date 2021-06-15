@@ -71,7 +71,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
 //                .antMatchers("/api/profile/register").anonymous()
                 .antMatchers("/api/profile/login").permitAll()
-//                .antMatchers(HttpMethod.GET, "/rest/restaurants/**").permitAll()
+                .antMatchers(HttpMethod.GET, "/api/albums/**").permitAll()
 //                .antMatchers("/swagger-ui.html").permitAll()
 //                .antMatchers("/swagger-resources/**").permitAll()
 //                .antMatchers("/v2/api-docs/**").permitAll()

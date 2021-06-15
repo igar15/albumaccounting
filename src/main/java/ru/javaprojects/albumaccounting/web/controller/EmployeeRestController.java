@@ -51,7 +51,7 @@ public class EmployeeRestController {
 
     @PostMapping(value = "/employees", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Employee> createWithLocation(@Valid @RequestBody EmployeeTo employeeTo) {
-        log.info("create {} for department {}", employeeTo, employeeTo.getDepartmentId());
+        log.info("create {}", employeeTo);
         checkNew(employeeTo);
         Employee created = service.create(employeeTo);
         URI uriOfNewResource = ServletUriComponentsBuilder.fromCurrentContextPath()

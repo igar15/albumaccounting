@@ -55,8 +55,8 @@ class AlbumServiceTest extends AbstractServiceTest {
     }
 
     @Test
-    void getAlbums() {
-        Page<Album> albums = service.getAlbums(PAGEABLE);
+    void getAll() {
+        Page<Album> albums = service.getAll(PAGEABLE);
         assertEquals(PAGE, albums);
         ALBUM_MATCHER.assertMatch(albums.getContent(), List.of(album1, album2, album3, album4));
     }

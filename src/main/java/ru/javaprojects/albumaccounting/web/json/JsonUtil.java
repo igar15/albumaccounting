@@ -48,4 +48,15 @@ public class JsonUtil {
         map.putAll(addProps);
         return writeValue(map);
     }
+
+    public static <T> List<T> readContentFromPage(String json, Class<T> clazz) {
+        json = removePageAttributes(json);
+        return readValues(json, clazz);
+    }
+
+    private static String removePageAttributes(String json) {
+        int openSquareBracketIndex = json.indexOf('[');
+        int closeSquareBracketIndex = json.indexOf(']');
+        return json.substring(openSquareBracketIndex, closeSquareBracketIndex + 1);
+    }
 }

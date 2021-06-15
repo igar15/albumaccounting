@@ -37,7 +37,7 @@ public class AlbumService {
         return repository.findById(id).orElseThrow(() -> new NotFoundException("Not found album with id=" + id));
     }
 
-    public Page<Album> getAlbums(Pageable pageable) {
+    public Page<Album> getAll(Pageable pageable) {
         Assert.notNull(pageable, "pageable must not be null");
         return repository.findAllByOrderByDecimalNumber(pageable);
     }

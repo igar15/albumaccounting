@@ -15,12 +15,14 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
 import ru.javaprojects.albumaccounting.AuthorizedUser;
 import ru.javaprojects.albumaccounting.model.User;
 import ru.javaprojects.albumaccounting.repository.UserRepository;
+import ru.javaprojects.albumaccounting.web.JwtAuthorizationFilter;
 import ru.javaprojects.albumaccounting.web.RestAccessDeniedHandler;
 import ru.javaprojects.albumaccounting.web.RestAuthenticationEntryPoint;
 
@@ -41,6 +43,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
     private RestAccessDeniedHandler restAccessDeniedHandler;
+
+    @Autowired
+    private JwtAuthorizationFilter jwtAuthorizationFilter;
 
     @Bean
     public UserDetailsService userDetailsService() {
@@ -82,10 +87,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 //                .antMatchers("/webjars/**").permitAll()
                 .anyRequest().authenticated()
                 .and()
-                .httpBasic()
-                .authenticationEntryPoint(restAuthenticationEntryPoint)
-                .and()
-                .exceptionHandling().accessDeniedHandler(restAccessDeniedHandler);
+//                .httpBasic()
+                .addFilterBefore(jwtAuthorizationFilter, UsernamePasswordAuthenticationFilter.class)
+                .exceptionHandling().accessDeniedHandler(restAccessDeniedHandler)
+                .authenticationEntryPoint(restAuthenticationEntryPoint);
     }
 
     @Bean

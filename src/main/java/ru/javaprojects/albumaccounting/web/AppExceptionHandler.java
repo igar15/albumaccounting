@@ -37,6 +37,7 @@ public class AppExceptionHandler {
     public static final String EXCEPTION_DUPLICATE_EMPLOYEE = "Employee with those name and phone number already exists";
     public static final String EXCEPTION_DUPLICATE_ALBUM = "Album with those decimal number and stamp already exists";
     public static final String EXCEPTION_HOLDER_HAS_ALBUMS = "Cannot delete because employee has albums";
+    public static final String EXCEPTION_NOT_AUTHORIZED = "You are not authorized";
     public static final String EXCEPTION_ACCESS_DENIED = "You do not have enough permission";
     public static final String EXCEPTION_BAD_CREDENTIALS = "Email / password incorrect. Please try again";
 

@@ -6,8 +6,10 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -16,8 +18,11 @@ import org.springframework.web.bind.annotation.*;
 import ru.javaprojects.albumaccounting.AuthorizedUser;
 import ru.javaprojects.albumaccounting.model.User;
 import ru.javaprojects.albumaccounting.service.UserService;
+import ru.javaprojects.albumaccounting.util.JwtProvider;
 
 import javax.validation.constraints.Size;
+
+import static ru.javaprojects.albumaccounting.util.JwtProvider.AUTHORIZATION_TOKEN_HEADER;
 
 @RestController
 @RequestMapping(value = ProfileRestController.REST_URL, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -32,6 +37,9 @@ public class ProfileRestController {
 
     @Autowired
     private AuthenticationManager authenticationManager;
+
+    @Autowired
+    private JwtProvider jwtProvider;
 
     @Operation(description = "Get user profile data")
     @GetMapping
@@ -51,9 +59,13 @@ public class ProfileRestController {
     @Operation(description = "Login to app")
     @SecurityRequirements
     @PostMapping("/login")
-    public User login(@RequestParam String email, @RequestParam String password) {
+    public ResponseEntity<User> login(@RequestParam String email, @RequestParam String password) {
         log.info("login user {}", email);
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(email.toLowerCase(), password));
-        return service.getByEmail(email.toLowerCase());
+        User loggedUser = service.getByEmail(email.toLowerCase());
+        AuthorizedUser authUser = new AuthorizedUser(loggedUser);
+        HttpHeaders jwtHeader = new HttpHeaders();
+        jwtHeader.add(AUTHORIZATION_TOKEN_HEADER, jwtProvider.generateAuthorizationToken(authUser));
+        return new ResponseEntity<>(loggedUser, jwtHeader, HttpStatus.OK);
     }
 }

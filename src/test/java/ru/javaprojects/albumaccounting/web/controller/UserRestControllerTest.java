@@ -37,9 +37,10 @@ class UserRestControllerTest extends AbstractControllerTest {
     private UserService userService;
 
     @Test
-    @WithUserDetails(value = ADMIN_MAIL)
+//    @WithUserDetails(value = ADMIN_MAIL)
     void getAll() throws Exception {
-        perform(MockMvcRequestBuilders.get(REST_URL))
+        perform(MockMvcRequestBuilders.get(REST_URL)
+                .headers(adminJwtHeader))
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(USER_MATCHER.contentJson(admin, user));

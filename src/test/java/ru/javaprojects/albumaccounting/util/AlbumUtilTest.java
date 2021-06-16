@@ -31,4 +31,9 @@ class AlbumUtilTest {
     void getAlbumLocationSameStartEndBorderCode() {
         assertEquals("С-1/П-4", getAlbumLocation("ВУИА.301214.008"));
     }
+
+    @Test
+    void getAlbumLocationNotFound() {
+        assertEquals("Unknown", getAlbumLocation("БА5.550.182"));
+    }
 }

@@ -45,10 +45,11 @@ CREATE UNIQUE INDEX employees_unique_name_phone_number_idx ON employees (name, p
 
 CREATE TABLE albums
 (
-    id INTEGER PRIMARY KEY DEFAULT nextval('global_seq'),
+    id             INTEGER PRIMARY KEY DEFAULT nextval('global_seq'),
     decimal_number VARCHAR NOT NULL,
-    stamp VARCHAR NOT NULL,
-    holder_id INTEGER NOT NULL,
+    stamp          VARCHAR NOT NULL,
+    location       VARCHAR NOT NULL,
+    holder_id      INTEGER NOT NULL,
     FOREIGN KEY (holder_id) REFERENCES employees (id)
 );
 CREATE UNIQUE INDEX albums_unique_decimal_number_stamp_idx ON albums (decimal_number, stamp);

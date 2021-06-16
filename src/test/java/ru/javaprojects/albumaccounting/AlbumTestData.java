@@ -20,27 +20,27 @@ public class AlbumTestData {
     public static final int ALBUM_4_ID = START_SEQ + 14;
     public static final int NOT_FOUND = 10;
 
-    public static final Album album1 = new Album(ALBUM_1_ID, "ВУИА.444444.005", I_STAMP);
-    public static final Album album2 = new Album(ALBUM_2_ID, "ВУИА.444444.006", I_STAMP);
-    public static final Album album3 = new Album(ALBUM_3_ID, "ВУИА.444444.007", I_STAMP);
-    public static final Album album4 = new Album(ALBUM_4_ID, "ВУИА.444444.008", I_STAMP);
+    public static final Album album1 = new Album(ALBUM_1_ID, "ВУИА.444444.005", I_STAMP, "С-3/П-1");
+    public static final Album album2 = new Album(ALBUM_2_ID, "ВУИА.444444.006", I_STAMP, "С-3/П-1");
+    public static final Album album3 = new Album(ALBUM_3_ID, "ВУИА.444444.007", I_STAMP, "С-3/П-1");
+    public static final Album album4 = new Album(ALBUM_4_ID, "ВУИА.444444.008", I_STAMP, "С-3/П-1");
 
     public static final Pageable PAGEABLE = PageRequest.of(0, 20, Sort.by("decimalNumber"));
     public static final Page<Album> PAGE = new PageImpl<>(List.of(album1, album2, album3, album4), PAGEABLE, 4);
 
     public static Album getNew() {
-        return new Album(null, "NewDecimalNumber", I_STAMP);
+        return new Album(null, "ВУИА.444444.009", I_STAMP, "С-3/П-1");
     }
 
     public static AlbumTo getNewTo() {
-        return new AlbumTo(null, "NewDecimalNumber", I_STAMP, EMPLOYEE_1_ID);
+        return new AlbumTo(null, "ВУИА.444444.009", I_STAMP, EMPLOYEE_1_ID);
     }
 
     public static Album getUpdated() {
-        return new Album(ALBUM_1_ID, "UpdatedDecimalNumber", II_STAMP);
+        return new Album(ALBUM_1_ID, "ВУИА.301257.009", II_STAMP, "С-2/П-3");
     }
 
     public static AlbumTo getUpdatedTo() {
-        return new AlbumTo(ALBUM_1_ID, "UpdatedDecimalNumber", II_STAMP, EMPLOYEE_1_ID);
+        return new AlbumTo(ALBUM_1_ID, "ВУИА.301257.009", II_STAMP, EMPLOYEE_1_ID);
     }
 }

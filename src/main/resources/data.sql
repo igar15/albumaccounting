@@ -27,8 +27,8 @@ VALUES ('Naumkin A.', '1-31-65', 100002),
        ('Strelnikov P.', '1-35-17', 100003),
        ('Larionova Y.', '1-29-74', 100004);
 
-INSERT INTO albums (decimal_number, stamp, holder_id)
-VALUES ('ВУИА.444444.005', 'I_STAMP', 100005),
-       ('ВУИА.444444.006', 'I_STAMP', 100005),
-       ('ВУИА.444444.007', 'I_STAMP', 100005),
-       ('ВУИА.444444.008', 'I_STAMP', 100006);
+INSERT INTO albums (decimal_number, stamp, location, holder_id)
+VALUES ('ВУИА.444444.005', 'I_STAMP', 'С-3/П-1', 100005),
+       ('ВУИА.444444.006', 'I_STAMP', 'С-3/П-1', 100005),
+       ('ВУИА.444444.007', 'I_STAMP', 'С-3/П-1', 100005),
+       ('ВУИА.444444.008', 'I_STAMP', 'С-3/П-1', 100006);

@@ -19,6 +19,10 @@ public class Album extends AbstractBaseEntity {
     @Column(name = "stamp", nullable = false)
     private Stamp stamp;
 
+    @NotBlank
+    @Column(name = "location", nullable = false)
+    private String location;
+
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "holder_id", nullable = false)
@@ -27,17 +31,11 @@ public class Album extends AbstractBaseEntity {
     public Album() {
     }
 
-    public Album(Integer id, String decimalNumber, Stamp stamp) {
+    public Album(Integer id, String decimalNumber, Stamp stamp, String location) {
         super(id);
         this.decimalNumber = decimalNumber;
         this.stamp = stamp;
-    }
-
-    public Album(Integer id, String decimalNumber, Stamp stamp, Employee holder) {
-        super(id);
-        this.decimalNumber = decimalNumber;
-        this.stamp = stamp;
-        this.holder = holder;
+        this.location = location;
     }
 
     public String getDecimalNumber() {
@@ -56,6 +54,14 @@ public class Album extends AbstractBaseEntity {
         this.stamp = stamp;
     }
 
+    public String getLocation() {
+        return location;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
+    }
+
     public Employee getHolder() {
         return holder;
     }
@@ -70,6 +76,7 @@ public class Album extends AbstractBaseEntity {
                 "id=" + id +
                 ", decimalNumber=" + decimalNumber +
                 ", stamp=" + stamp +
+                ", location=" + location +
                 '}';
     }
 }

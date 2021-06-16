@@ -7,6 +7,7 @@ import ru.javaprojects.albumaccounting.util.exception.PropertiesException;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Reader;
+import java.nio.charset.StandardCharsets;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Properties;
@@ -15,7 +16,8 @@ public class AlbumUtil {
     private static final Properties albumsLocation = new Properties();
 
     static {
-        try (Reader r = new InputStreamReader(Objects.requireNonNull(AlbumUtil.class.getClassLoader().getResourceAsStream("albums_location.properties")))) {
+        try (Reader r = new InputStreamReader(Objects.requireNonNull(
+                AlbumUtil.class.getClassLoader().getResourceAsStream("albums_location.properties")), StandardCharsets.UTF_8)) {
             albumsLocation.load(r);
         } catch (IOException e) {
             throw new PropertiesException("Cannot load albums_location.properties", e);
@@ -26,64 +28,69 @@ public class AlbumUtil {
     }
 
     public static Album createFromTo(AlbumTo albumTo) {
-        return new Album(albumTo.getId(), albumTo.getDecimalNumber(), albumTo.getStamp());
+        return new Album(albumTo.getId(), albumTo.getDecimalNumber(), albumTo.getStamp(), getAlbumLocation(albumTo.getDecimalNumber()));
     }
 
     public static Album updateFromTo(Album album, AlbumTo albumTo) {
         album.setDecimalNumber(albumTo.getDecimalNumber());
         album.setStamp(albumTo.getStamp());
+        album.setLocation(getAlbumLocation(albumTo.getDecimalNumber()));
         return album;
     }
 
     static String getAlbumLocation(String decimalNumber) {
-        String[] decNumParts = splitDeNumToParts(decimalNumber);
-        String orgCode = decNumParts[0];
-        int classCode = Integer.parseInt(decNumParts[1]);
-        int regNum = getRegNum(decNumParts);
+        try {
+            String[] decNumParts = splitDeNumToParts(decimalNumber);
+            String orgCode = decNumParts[0];
+            int classCode = Integer.parseInt(decNumParts[1]);
+            int regNum = getRegNum(decNumParts);
 
-        Optional<Object> interval = albumsLocation.keySet().stream()
-                .filter(decNumInterval -> {
-                    String[] intervalBorders = ((String) decNumInterval).split("\\|\\|");
+            Optional<Object> interval = albumsLocation.keySet().stream()
+                    .filter(decNumInterval -> {
+                        String[] intervalBorders = ((String) decNumInterval).split("\\|\\|");
 
-                    String startBorderDecNum = intervalBorders[0];
-                    String[] startBorderDecNumParts = splitDeNumToParts(startBorderDecNum);
-                    String startBorderDecNumOrgCode = startBorderDecNumParts[0];
-                    int startBorderDecNumClassCode = Integer.parseInt(startBorderDecNumParts[1]);
-                    int startBorderDecNumRegNum = getRegNum(startBorderDecNumParts);
+                        String startBorderDecNum = intervalBorders[0];
+                        String[] startBorderDecNumParts = splitDeNumToParts(startBorderDecNum);
+                        String startBorderDecNumOrgCode = startBorderDecNumParts[0];
+                        int startBorderDecNumClassCode = Integer.parseInt(startBorderDecNumParts[1]);
+                        int startBorderDecNumRegNum = getRegNum(startBorderDecNumParts);
 
-                    String endBorderDecNum = intervalBorders[1];
-                    String[] endBorderDecNumParts = splitDeNumToParts(endBorderDecNum);
-                    String endBorderDecNumOrgCode = endBorderDecNumParts[0];
-                    int endBorderDecNumClassCode = Integer.parseInt(endBorderDecNumParts[1]);
-                    int endBorderDecNumRegNum = getRegNum(endBorderDecNumParts);
+                        String endBorderDecNum = intervalBorders[1];
+                        String[] endBorderDecNumParts = splitDeNumToParts(endBorderDecNum);
+                        String endBorderDecNumOrgCode = endBorderDecNumParts[0];
+                        int endBorderDecNumClassCode = Integer.parseInt(endBorderDecNumParts[1]);
+                        int endBorderDecNumRegNum = getRegNum(endBorderDecNumParts);
 
-                    if (decimalNumber.equalsIgnoreCase(startBorderDecNum) || decimalNumber.equalsIgnoreCase(endBorderDecNum)) {
-                        return true;
-                    } else if (orgCode.equalsIgnoreCase(startBorderDecNumOrgCode)) {
-                        if (classCode < startBorderDecNumClassCode) {
-                            return false;
-                        } else if (classCode == startBorderDecNumClassCode && regNum < startBorderDecNumRegNum) {
-                            return false;
-                        }
-                        if (!orgCode.equalsIgnoreCase(endBorderDecNumOrgCode)) {
+                        if (decimalNumber.equalsIgnoreCase(startBorderDecNum) || decimalNumber.equalsIgnoreCase(endBorderDecNum)) {
                             return true;
-                        } else if (classCode > endBorderDecNumClassCode) {
+                        } else if (orgCode.equalsIgnoreCase(startBorderDecNumOrgCode)) {
+                            if (classCode < startBorderDecNumClassCode) {
+                                return false;
+                            } else if (classCode == startBorderDecNumClassCode && regNum < startBorderDecNumRegNum) {
+                                return false;
+                            }
+                            if (!orgCode.equalsIgnoreCase(endBorderDecNumOrgCode)) {
+                                return true;
+                            } else if (classCode > endBorderDecNumClassCode) {
+                                return false;
+                            } else if (classCode == endBorderDecNumClassCode && regNum > endBorderDecNumRegNum) {
+                                return false;
+                            }
+                            return true;
+                        } else if (!orgCode.equalsIgnoreCase(endBorderDecNumOrgCode)) {
                             return false;
-                        } else if (classCode == endBorderDecNumClassCode && regNum > endBorderDecNumRegNum) {
-                            return false;
+                        } else if (classCode < endBorderDecNumClassCode) {
+                            return true;
+                        } else if (classCode == endBorderDecNumClassCode && regNum < endBorderDecNumRegNum) {
+                            return true;
                         }
-                        return true;
-                    } else if (!orgCode.equalsIgnoreCase(endBorderDecNumOrgCode)) {
                         return false;
-                    } else if (classCode < endBorderDecNumClassCode) {
-                        return true;
-                    } else if (classCode == endBorderDecNumClassCode && regNum < endBorderDecNumRegNum) {
-                        return true;
-                    }
-                    return false;
-                })
-                .findFirst();
-        return (String) albumsLocation.getOrDefault(interval.orElseGet(() -> "not found"), "Location unknown");
+                    })
+                    .findFirst();
+            return (String) albumsLocation.getOrDefault(interval.orElseGet(() -> "unknown interval"), "Unknown");
+        } catch (Exception e) {
+            return "Unknown";
+        }
     }
 
     private static String[] splitDeNumToParts(String decimalNumber) {

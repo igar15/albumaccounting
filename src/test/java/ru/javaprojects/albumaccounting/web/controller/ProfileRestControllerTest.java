@@ -1,19 +1,25 @@
 package ru.javaprojects.albumaccounting.web.controller;
 
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import ru.javaprojects.albumaccounting.service.UserService;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static ru.javaprojects.albumaccounting.UserTestData.*;
 import static ru.javaprojects.albumaccounting.util.exception.ErrorType.*;
+import static ru.javaprojects.albumaccounting.web.AppExceptionHandler.EXCEPTION_DISABLED;
 import static ru.javaprojects.albumaccounting.web.AppExceptionHandler.EXCEPTION_INVALID_PASSWORD;
 import static ru.javaprojects.albumaccounting.web.controller.ProfileRestController.REST_URL;
 
 class ProfileRestControllerTest extends AbstractControllerTest {
+
+    @Autowired
+    private UserService userService;
 
     @Test
     @WithUserDetails(value = USER_MAIL)
@@ -67,5 +73,18 @@ class ProfileRestControllerTest extends AbstractControllerTest {
                 .param("password", "wrongPassword"))
                 .andExpect(status().isBadRequest())
                 .andExpect(errorType(BAD_CREDENTIALS_ERROR));
+    }
+
+    @Test
+    void loginDisabled() throws Exception {
+        userService.enable(USER_ID, false);
+
+        perform(MockMvcRequestBuilders.post(REST_URL + "/login")
+                .param("email", user.getEmail())
+                .param("password", user.getPassword()))
+                .andDo(print())
+                .andExpect(status().isForbidden())
+                .andExpect(errorType(DISABLED_ERROR))
+                .andExpect(detailMessage(EXCEPTION_DISABLED));
     }
 }

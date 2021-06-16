@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.DisabledException;
 import org.springframework.validation.BindException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -39,6 +40,7 @@ public class AppExceptionHandler {
     public static final String EXCEPTION_HOLDER_HAS_ALBUMS = "Cannot delete because employee has albums";
     public static final String EXCEPTION_ACCESS_DENIED = "You do not have enough permission";
     public static final String EXCEPTION_BAD_CREDENTIALS = "Email / password incorrect. Please try again";
+    public static final String EXCEPTION_DISABLED = "You got banned";
 
     private static final Map<String, String> CONSTRAINS_MAP = Map.of(
             "users_unique_email_idx", EXCEPTION_DUPLICATE_EMAIL,
@@ -100,6 +102,11 @@ public class AppExceptionHandler {
     @ExceptionHandler(BadCredentialsException.class)
     public ResponseEntity<ErrorInfo> forbiddenRequestError(HttpServletRequest req, BadCredentialsException e) {
         return logAndGetErrorInfo(req, e, false, BAD_CREDENTIALS_ERROR, EXCEPTION_BAD_CREDENTIALS);
+    }
+
+    @ExceptionHandler(DisabledException.class)
+    public ResponseEntity<ErrorInfo> forbiddenRequestError(HttpServletRequest req, DisabledException e) {
+        return logAndGetErrorInfo(req, e, false, DISABLED_ERROR, EXCEPTION_DISABLED);
     }
 
     @ExceptionHandler(Exception.class)

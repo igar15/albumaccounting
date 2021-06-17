@@ -30,17 +30,15 @@ import static ru.javaprojects.albumaccounting.web.AppExceptionHandler.EXCEPTION_
 import static ru.javaprojects.albumaccounting.web.AppExceptionHandler.EXCEPTION_INVALID_PASSWORD;
 
 class UserRestControllerTest extends AbstractControllerTest {
-
     private static final String REST_URL = UserRestController.REST_URL + '/';
 
     @Autowired
     private UserService userService;
 
     @Test
-//    @WithUserDetails(value = ADMIN_MAIL)
+    @WithUserDetails(value = ADMIN_MAIL)
     void getAll() throws Exception {
-        perform(MockMvcRequestBuilders.get(REST_URL)
-                .headers(adminJwtHeader))
+        perform(MockMvcRequestBuilders.get(REST_URL))
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(USER_MATCHER.contentJson(admin, user));

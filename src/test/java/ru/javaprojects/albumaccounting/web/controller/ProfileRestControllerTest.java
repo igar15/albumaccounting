@@ -81,7 +81,7 @@ class ProfileRestControllerTest extends AbstractControllerTest {
 
         perform(MockMvcRequestBuilders.post(REST_URL + "/login")
                 .param("email", user.getEmail())
-                .param("password", "wrongPassword"))
+                .param("password", user.getPassword()))
                 .andExpect(status().isForbidden())
                 .andExpect(errorType(DISABLED_ERROR))
                 .andExpect(detailMessage(EXCEPTION_DISABLED));

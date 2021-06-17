@@ -63,9 +63,8 @@ public class ProfileRestController {
         log.info("login user {}", email);
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(email.toLowerCase(), password));
         User loggedUser = service.getByEmail(email.toLowerCase());
-        AuthorizedUser authUser = new AuthorizedUser(loggedUser);
         HttpHeaders jwtHeader = new HttpHeaders();
-        jwtHeader.add(AUTHORIZATION_TOKEN_HEADER, jwtProvider.generateAuthorizationToken(authUser));
+        jwtHeader.add(AUTHORIZATION_TOKEN_HEADER, jwtProvider.generateAuthorizationToken(email.toLowerCase()));
         return new ResponseEntity<>(loggedUser, jwtHeader, HttpStatus.OK);
     }
 }

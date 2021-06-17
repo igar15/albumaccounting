@@ -7,7 +7,6 @@ import com.auth0.jwt.exceptions.JWTVerificationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
-import ru.javaprojects.albumaccounting.AuthorizedUser;
 
 import java.util.Date;
 
@@ -23,12 +22,12 @@ public class JwtProvider {
     @Autowired
     private Environment environment;
 
-    public  String generateAuthorizationToken(AuthorizedUser authUser) {
+    public  String generateAuthorizationToken(String userEmail) {
         return JWT.create()
                 .withIssuer(JAVA_PROJECTS)
                 .withAudience(ALBUM_ACCOUNTING_AUDIENCE)
                 .withIssuedAt(new Date())
-                .withSubject(authUser.getUserEmail())
+                .withSubject(userEmail)
                 .withExpiresAt(new Date(System.currentTimeMillis() + AUTHORIZATION_TOKEN_EXPIRATION_TIME))
                 .sign(Algorithm.HMAC512(environment.getProperty("jwt.secretKey")));
     }

@@ -1,5 +1,6 @@
 package ru.javaprojects.albumaccounting.web;
 
+import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -26,7 +27,9 @@ import java.io.IOException;
 import java.util.Optional;
 
 import static ru.javaprojects.albumaccounting.util.JwtProvider.TOKEN_PREFIX;
+import static ru.javaprojects.albumaccounting.util.exception.ErrorType.BAD_TOKEN_ERROR;
 import static ru.javaprojects.albumaccounting.util.exception.ErrorType.DISABLED_ERROR;
+import static ru.javaprojects.albumaccounting.web.AppExceptionHandler.EXCEPTION_BAD_TOKEN;
 import static ru.javaprojects.albumaccounting.web.AppExceptionHandler.EXCEPTION_DISABLED;
 
 @Component
@@ -51,19 +54,24 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
                 return;
             }
 
-            String token = authorizationHeader.substring(TOKEN_PREFIX.length());
-            String userEmail = jwtProvider.getSubject(token);
+            try {
+                String token = authorizationHeader.substring(TOKEN_PREFIX.length());
+                String userEmail = jwtProvider.getSubject(token);
 
-            if (jwtProvider.isTokenValid(userEmail, token) && SecurityContextHolder.getContext().getAuthentication() == null) {
-                AuthResult authResult = getAuthentication(userEmail, request, response);
-                if (!authResult.enable) {
-                    return;
-                } else {
-                    SecurityContextHolder.getContext().setAuthentication(authResult.authToken);
+                if (jwtProvider.isTokenValid(userEmail, token) && SecurityContextHolder.getContext().getAuthentication() == null) {
+                    AuthResult authResult = getAuthentication(userEmail, request, response);
+                    if (!authResult.enable) {
+                        return;
+                    } else {
+                        SecurityContextHolder.getContext().setAuthentication(authResult.authToken);
+                    }
                 }
-            }
-            else {
-                SecurityContextHolder.clearContext();
+                else {
+                    SecurityContextHolder.clearContext();
+                }
+            } catch (JWTVerificationException e) {
+                sendBadTokenResponse(request, response);
+                return;
             }
         }
         filterChain.doFilter(request, response);
@@ -97,9 +105,20 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
         outputStream.flush();
     }
 
+    private void sendBadTokenResponse(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        ErrorInfo responseEntity = new ErrorInfo(request.getRequestURL(), BAD_TOKEN_ERROR,
+                BAD_TOKEN_ERROR.getErrorCode(), EXCEPTION_BAD_TOKEN);
+        response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+        response.setStatus(HttpStatus.UNAUTHORIZED.value());
+        ServletOutputStream outputStream = response.getOutputStream();
+        ObjectMapper mapper = JacksonObjectMapper.getMapper();
+        mapper.writeValue(outputStream, responseEntity);
+        outputStream.flush();
+    }
+
     private static class AuthResult {
-        private UsernamePasswordAuthenticationToken authToken;
-        private boolean enable;
+        private final UsernamePasswordAuthenticationToken authToken;
+        private final boolean enable;
 
         public AuthResult(UsernamePasswordAuthenticationToken authToken, boolean enable) {
             this.authToken = authToken;

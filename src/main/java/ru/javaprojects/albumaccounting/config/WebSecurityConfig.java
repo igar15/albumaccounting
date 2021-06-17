@@ -84,10 +84,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.GET, "/api/albums/**").permitAll()
                 .antMatchers("/swagger*/**").permitAll()
                 .antMatchers("/v3/api-docs/**").permitAll()
-//                .antMatchers("/webjars/**").permitAll()
                 .anyRequest().authenticated()
                 .and()
-//                .httpBasic()
                 .addFilterBefore(jwtAuthorizationFilter, UsernamePasswordAuthenticationFilter.class)
                 .exceptionHandling().accessDeniedHandler(restAccessDeniedHandler)
                 .authenticationEntryPoint(restAuthenticationEntryPoint);

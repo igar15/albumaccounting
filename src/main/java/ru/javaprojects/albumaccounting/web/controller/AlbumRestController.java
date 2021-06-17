@@ -1,6 +1,9 @@
 package ru.javaprojects.albumaccounting.web.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.Parameters;
+import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.security.SecurityRequirements;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.slf4j.Logger;
@@ -21,6 +24,7 @@ import ru.javaprojects.albumaccounting.to.AlbumTo;
 import javax.validation.Valid;
 import java.net.URI;
 
+import static io.swagger.v3.oas.annotations.enums.ParameterIn.QUERY;
 import static ru.javaprojects.albumaccounting.util.ValidationUtil.assureIdConsistent;
 import static ru.javaprojects.albumaccounting.util.ValidationUtil.checkNew;
 
@@ -34,10 +38,12 @@ public class AlbumRestController {
     @Autowired
     private AlbumService service;
 
+    @Parameters({@Parameter(name = "page", in = QUERY, description = "Zero-based page index (0..N)", schema = @Schema(type = "integer", defaultValue = "0")),
+                 @Parameter(name = "size", in = QUERY, description = "The size of the page to be returned", schema = @Schema(type = "integer", defaultValue = "20"))})
     @Operation(description = "Get page with albums")
     @SecurityRequirements
     @GetMapping
-    public Page<Album> getAll(Pageable pageable) {
+    public Page<Album> getAll(@Parameter(hidden = true) Pageable pageable) {
         log.info("getAll (pageNumber={}, pageSize={})", pageable.getPageNumber(), pageable.getPageSize());
         return service.getAll(pageable);
     }

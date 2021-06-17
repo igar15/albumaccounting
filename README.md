@@ -10,10 +10,12 @@ This is the REST API implementation of constructor documentation album accountin
 * Maven
 * Spring Boot
 * Spring MVC
-* Spring Security
 * Spring Data JPA (Hibernate)
+* Spring Security
 * REST (Jackson)
+* JSON Web Token
 * JUnit
+* OpenAPI 3
 
 ### Project key logic:
 * System main purpose: obtaining information about the location of a specific album of constructor documentation at the moment.
@@ -25,7 +27,7 @@ This is the REST API implementation of constructor documentation album accountin
 * An archive worker, when the developer returns the album to the archive, enters the relevant information into the system.
 
 ###Application Domain Model Schema
-![domain_model](https://user-images.githubusercontent.com/60218699/120080245-9c17ee80-c0c0-11eb-97b7-e147de9c895c.png)
+![domain_model](https://user-images.githubusercontent.com/60218699/122444402-2c9f6b80-cfa9-11eb-89e0-d6ac1804393e.png)
 
 ### API documentation:
 #### Swagger documentation

@@ -1,8 +1,10 @@
 package ru.javaprojects.albumaccounting.web;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
@@ -12,15 +14,20 @@ import ru.javaprojects.albumaccounting.AuthorizedUser;
 import ru.javaprojects.albumaccounting.model.User;
 import ru.javaprojects.albumaccounting.repository.UserRepository;
 import ru.javaprojects.albumaccounting.util.JwtProvider;
+import ru.javaprojects.albumaccounting.util.exception.ErrorInfo;
+import ru.javaprojects.albumaccounting.web.json.JacksonObjectMapper;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
+import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Optional;
 
 import static ru.javaprojects.albumaccounting.util.JwtProvider.TOKEN_PREFIX;
+import static ru.javaprojects.albumaccounting.util.exception.ErrorType.DISABLED_ERROR;
+import static ru.javaprojects.albumaccounting.web.AppExceptionHandler.EXCEPTION_DISABLED;
 
 @Component
 public class JwtAuthorizationFilter extends OncePerRequestFilter {
@@ -48,7 +55,12 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
             String userEmail = jwtProvider.getSubject(token);
 
             if (jwtProvider.isTokenValid(userEmail, token) && SecurityContextHolder.getContext().getAuthentication() == null) {
-                SecurityContextHolder.getContext().setAuthentication(getAuthentication(userEmail, request));
+                AuthResult authResult = getAuthentication(userEmail, request, response);
+                if (!authResult.enable) {
+                    return;
+                } else {
+                    SecurityContextHolder.getContext().setAuthentication(authResult.authToken);
+                }
             }
             else {
                 SecurityContextHolder.clearContext();
@@ -57,19 +69,41 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
         filterChain.doFilter(request, response);
     }
 
-    private UsernamePasswordAuthenticationToken getAuthentication(String userEmail, HttpServletRequest request) {
+    private AuthResult getAuthentication(String userEmail, HttpServletRequest request, HttpServletResponse response) throws IOException {
         UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = null;
         Optional<User> optionalUser = userRepository.findByEmail(userEmail);
         if (optionalUser.isPresent()) {
             User user = optionalUser.get();
-//            if (!user.isEnabled()) {
-//                throw new DisabledException("User " + userEmail + " account is disabled");
-//            }
+            if (!user.isEnabled()) {
+                sendDisableResponse(request, response);
+                return new AuthResult(null, false);
+            }
             AuthorizedUser authUser = new AuthorizedUser(user);
             usernamePasswordAuthenticationToken =
                     new UsernamePasswordAuthenticationToken(authUser, null, authUser.getAuthorities());
             usernamePasswordAuthenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
         }
-        return usernamePasswordAuthenticationToken;
+        return new AuthResult(usernamePasswordAuthenticationToken, true);
+    }
+
+    private void sendDisableResponse(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        ErrorInfo responseEntity = new ErrorInfo(request.getRequestURL(), DISABLED_ERROR,
+                DISABLED_ERROR.getErrorCode(), EXCEPTION_DISABLED);
+        response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+        response.setStatus(HttpStatus.FORBIDDEN.value());
+        ServletOutputStream outputStream = response.getOutputStream();
+        ObjectMapper mapper = JacksonObjectMapper.getMapper();
+        mapper.writeValue(outputStream, responseEntity);
+        outputStream.flush();
+    }
+
+    private static class AuthResult {
+        private UsernamePasswordAuthenticationToken authToken;
+        private boolean enable;
+
+        public AuthResult(UsernamePasswordAuthenticationToken authToken, boolean enable) {
+            this.authToken = authToken;
+            this.enable = enable;
+        }
     }
 }

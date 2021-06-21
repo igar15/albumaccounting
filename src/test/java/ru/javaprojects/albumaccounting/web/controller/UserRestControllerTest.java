@@ -61,6 +61,33 @@ class UserRestControllerTest extends AbstractControllerTest {
 
     @Test
     @WithUserDetails(value = ADMIN_MAIL)
+    void getAllByKeyWord() throws Exception {
+        perform(MockMvcRequestBuilders.get(REST_URL + "by")
+                .param("keyWord", "admin"))
+                .andExpect(status().isOk())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(USER_MATCHER.contentJson(new User[] {admin}));
+    }
+
+    @Test
+    void getAllByKeyWordUnAuth() throws Exception {
+        perform(MockMvcRequestBuilders.get(REST_URL + "by")
+                .param("keyWord", "admin"))
+                .andExpect(status().isUnauthorized())
+                .andExpect(errorType(UNAUTHORIZED_ERROR));
+    }
+
+    @Test
+    @WithUserDetails(value = USER_MAIL)
+    void getAllByKeyWordForbidden() throws Exception {
+        perform(MockMvcRequestBuilders.get(REST_URL + "by")
+                .param("keyWord", "admin"))
+                .andExpect(status().isForbidden())
+                .andExpect(errorType(ACCESS_DENIED_ERROR));
+    }
+
+    @Test
+    @WithUserDetails(value = ADMIN_MAIL)
     void get() throws Exception {
         perform(MockMvcRequestBuilders.get(REST_URL + ADMIN_ID))
                 .andExpect(status().isOk())

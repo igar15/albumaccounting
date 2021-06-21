@@ -64,6 +64,28 @@ class UserServiceTest extends AbstractServiceTest {
     }
 
     @Test
+    void getByNameKeyWord() {
+        List<User> users = service.getAllByKeyWord("admin");
+        USER_MATCHER.assertMatch(users, List.of(admin));
+        users = service.getAllByKeyWord("AdMin");
+        USER_MATCHER.assertMatch(users, List.of(admin));
+        users = service.getAllByKeyWord("Adm");
+        USER_MATCHER.assertMatch(users, List.of(admin));
+        users = service.getAllByKeyWord("Min");
+        USER_MATCHER.assertMatch(users, List.of(admin));
+    }
+
+    @Test
+    void getByEmailKeyWord() {
+        List<User> users = service.getAllByKeyWord("@yandex.ru");
+        USER_MATCHER.assertMatch(users, List.of(user));
+        users = service.getAllByKeyWord("@YAndex.ru");
+        USER_MATCHER.assertMatch(users, List.of(user));
+        users = service.getAllByKeyWord("@");
+        USER_MATCHER.assertMatch(users, List.of(admin, user));
+    }
+
+    @Test
     void delete() {
         service.delete(USER_ID);
         assertThrows(NotFoundException.class, () -> service.get(USER_ID));

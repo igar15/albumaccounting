@@ -41,6 +41,10 @@ public class UserService {
         return repository.findAllByOrderByNameAscEmail();
     }
 
+    public List<User> getAllByKeyWord(String keyWord) {
+        return repository.findAllByNameContainsIgnoreCaseOrEmailContainsIgnoreCaseOrderByNameAscEmail(keyWord, keyWord);
+    }
+
     public void delete(int id) {
         User user = get(id);
         repository.delete(user);

@@ -11,12 +11,13 @@ public class UserUtil {
     }
 
     public static UserTo asTo(User user) {
-        return new UserTo(user.getId(), user.getName(), user.getEmail(), user.getRoles());
+        return new UserTo(user.getId(), user.getName(), user.getEmail(), user.isEnabled(), user.getRoles());
     }
 
     public static User updateFromTo(User user, UserTo userTo) {
         user.setName(userTo.getName());
         user.setEmail(userTo.getEmail().toLowerCase());
+        user.setEnabled(userTo.getEnabled());
         user.setRoles(userTo.getRoles());
         return user;
     }

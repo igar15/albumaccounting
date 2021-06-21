@@ -368,7 +368,7 @@ class UserRestControllerTest extends AbstractControllerTest {
     @WithUserDetails(value = ADMIN_MAIL)
     @Transactional(propagation = Propagation.NEVER)
     void updateDuplicateEmail() throws Exception {
-        UserTo updatedTo = new UserTo(null, "Updated", admin.getEmail(), Set.of(Role.ARCHIVE_WORKER, Role.ADMIN));
+        UserTo updatedTo = new UserTo(null, "Updated", admin.getEmail(), true, Set.of(Role.ARCHIVE_WORKER, Role.ADMIN));
         perform(MockMvcRequestBuilders.put(REST_URL + USER_ID)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(JsonUtil.writeValue(updatedTo)))

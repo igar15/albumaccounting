@@ -29,7 +29,7 @@ public class UserTestData {
     }
 
     public static UserTo getUpdated() {
-        return new UserTo(USER_ID, "UpdatedName", "update@gmail.com", Set.of(Role.ADMIN));
+        return new UserTo(USER_ID, "UpdatedName", "update@gmail.com", false, Set.of(Role.ADMIN));
     }
 
     public static String jsonWithPassword(User user, String password) {

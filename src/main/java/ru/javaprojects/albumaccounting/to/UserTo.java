@@ -2,10 +2,7 @@ package ru.javaprojects.albumaccounting.to;
 
 import ru.javaprojects.albumaccounting.model.Role;
 
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.Size;
+import javax.validation.constraints.*;
 import java.io.Serial;
 import java.io.Serializable;
 import java.util.Set;
@@ -23,16 +20,20 @@ public class UserTo extends BaseTo implements Serializable {
     @Size(max = 100)
     private String email;
 
+    @NotNull
+    private Boolean enabled;
+
     @NotEmpty
     private Set<Role> roles;
 
     public UserTo() {
     }
 
-    public UserTo(Integer id, String name, String email, Set<Role> roles) {
+    public UserTo(Integer id, String name, String email, boolean enabled, Set<Role> roles) {
         super(id);
         this.name = name;
         this.email = email;
+        this.enabled = enabled;
         this.roles = roles;
     }
 
@@ -52,6 +53,14 @@ public class UserTo extends BaseTo implements Serializable {
         this.email = email;
     }
 
+    public Boolean getEnabled() {
+        return enabled;
+    }
+
+    public void setEnabled(Boolean enabled) {
+        this.enabled = enabled;
+    }
+
     public Set<Role> getRoles() {
         return roles;
     }
@@ -66,6 +75,7 @@ public class UserTo extends BaseTo implements Serializable {
                 "id=" + id +
                 ", name=" + name +
                 ", email=" + email +
+                ", enabled=" + enabled +
                 ", roles=" + roles +
                 '}';
     }

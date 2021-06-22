@@ -54,7 +54,7 @@ public class UserService {
     public void update(UserTo userTo) {
         Assert.notNull(userTo, "userTo must not be null");
         User user = get(userTo.id());
-        prepareAndSave(updateFromTo(user, userTo));
+        updateFromTo(user, userTo);
     }
 
     @Transactional

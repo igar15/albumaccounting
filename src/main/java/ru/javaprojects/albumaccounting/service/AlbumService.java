@@ -42,6 +42,11 @@ public class AlbumService {
         return repository.findAllByOrderByDecimalNumber(pageable);
     }
 
+    public Page<Album> getAllByKeyWord(String keyWord, Pageable pageable) {
+        Assert.notNull(pageable, "pageable must not be null");
+        return repository.findAllByDecimalNumberContainsIgnoreCaseOrderByDecimalNumber(keyWord, pageable);
+    }
+
     public void delete(int id) {
         Album album = get(id);
         repository.delete(album);

@@ -67,6 +67,35 @@ class AlbumRestControllerTest extends AbstractControllerTest {
     }
 
     @Test
+    @WithUserDetails(USER_MAIL)
+    void getAllByKeyWord() throws Exception {
+        ResultActions action = perform(MockMvcRequestBuilders.get(REST_URL + "by")
+                .param("keyWord", "вуиа")
+                .param("page", "0")
+                .param("size", "3"))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON));
+
+        List<Album> albums = JsonUtil.readContentFromPage(action.andReturn().getResponse().getContentAsString(), Album.class);
+        ALBUM_MATCHER.assertMatch(albums, album1, album2, album3);
+    }
+
+    @Test
+    void getAllByKeyWordUnAuthorized() throws Exception {
+        ResultActions action = perform(MockMvcRequestBuilders.get(REST_URL + "by")
+                .param("keyWord", "ву")
+                .param("page", "0")
+                .param("size", "2"))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON));
+
+        List<Album> albums = JsonUtil.readContentFromPage(action.andReturn().getResponse().getContentAsString(), Album.class);
+        ALBUM_MATCHER.assertMatch(albums, album1, album2);
+    }
+
+    @Test
     @WithUserDetails(ADMIN_MAIL)
     void get() throws Exception {
         perform(MockMvcRequestBuilders.get(REST_URL + ALBUM_1_ID))

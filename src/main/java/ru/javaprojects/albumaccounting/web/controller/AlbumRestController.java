@@ -48,6 +48,16 @@ public class AlbumRestController {
         return service.getAll(pageable);
     }
 
+    @Parameters({@Parameter(name = "page", in = QUERY, description = "Zero-based page index (0..N)", schema = @Schema(type = "integer", defaultValue = "0")),
+            @Parameter(name = "size", in = QUERY, description = "The size of the page to be returned", schema = @Schema(type = "integer", defaultValue = "20"))})
+    @Operation(description = "Get page with albums by key word")
+    @SecurityRequirements
+    @GetMapping("/by")
+    public Page<Album> getAllByKeyWord(@Parameter(hidden = true) Pageable pageable, @RequestParam String keyWord) {
+        log.info("getAllByKeyWord {} (pageNumber={}, pageSize={})", keyWord, pageable.getPageNumber(), pageable.getPageSize());
+        return service.getAllByKeyWord(keyWord, pageable);
+    }
+
     @Operation(description = "Get album")
     @SecurityRequirements
     @GetMapping("/{id}")

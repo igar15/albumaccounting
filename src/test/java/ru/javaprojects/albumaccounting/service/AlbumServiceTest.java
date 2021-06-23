@@ -67,6 +67,20 @@ class AlbumServiceTest extends AbstractServiceTest {
     }
 
     @Test
+    void getAllByKeyWord() {
+        Page<Album> albums = service.getAllByKeyWord(album1.getDecimalNumber(), PAGEABLE);
+        assertEquals(PAGE_BY_KEYWORD_ONE_TOTAL, albums);
+        ALBUM_MATCHER.assertMatch(albums.getContent(), List.of(album1));
+        Album firstAlbum = albums.getContent().get(0);
+        EMPLOYEE_MATCHER.assertMatch(firstAlbum.getHolder(), employee1);
+        DEPARTMENT_MATCHER.assertMatch(firstAlbum.getHolder().getDepartment(), department1);
+
+        albums = service.getAllByKeyWord("ВУИА", PAGEABLE);
+        assertEquals(PAGE_BY_KEYWORD_FOUR_TOTAL, albums);
+        ALBUM_MATCHER.assertMatch(albums.getContent(), List.of(album1, album2, album3, album4));
+    }
+
+    @Test
     void delete() {
         service.delete(ALBUM_1_ID);
         assertThrows(NotFoundException.class, () -> service.get(ALBUM_1_ID));

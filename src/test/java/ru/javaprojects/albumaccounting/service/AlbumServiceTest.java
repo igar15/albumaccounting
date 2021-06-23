@@ -18,6 +18,8 @@ import static ru.javaprojects.albumaccounting.AlbumTestData.getNewTo;
 import static ru.javaprojects.albumaccounting.AlbumTestData.getUpdated;
 import static ru.javaprojects.albumaccounting.AlbumTestData.getUpdatedTo;
 import static ru.javaprojects.albumaccounting.AlbumTestData.*;
+import static ru.javaprojects.albumaccounting.DepartmentTestData.DEPARTMENT_MATCHER;
+import static ru.javaprojects.albumaccounting.DepartmentTestData.department1;
 import static ru.javaprojects.albumaccounting.EmployeeTestData.NOT_FOUND;
 import static ru.javaprojects.albumaccounting.EmployeeTestData.*;
 import static ru.javaprojects.albumaccounting.model.Stamp.I_STAMP;
@@ -59,6 +61,9 @@ class AlbumServiceTest extends AbstractServiceTest {
         Page<Album> albums = service.getAll(PAGEABLE);
         assertEquals(PAGE, albums);
         ALBUM_MATCHER.assertMatch(albums.getContent(), List.of(album1, album2, album3, album4));
+        Album firstAlbum = albums.getContent().get(0);
+        EMPLOYEE_MATCHER.assertMatch(firstAlbum.getHolder(), employee1);
+        DEPARTMENT_MATCHER.assertMatch(firstAlbum.getHolder().getDepartment(), department1);
     }
 
     @Test

@@ -50,12 +50,22 @@ public class AlbumRestController {
 
     @Parameters({@Parameter(name = "page", in = QUERY, description = "Zero-based page index (0..N)", schema = @Schema(type = "integer", defaultValue = "0")),
             @Parameter(name = "size", in = QUERY, description = "The size of the page to be returned", schema = @Schema(type = "integer", defaultValue = "20"))})
-    @Operation(description = "Get page with albums by key word")
+    @Operation(description = "Get page with albums by decimal number")
     @SecurityRequirements
-    @GetMapping("/by")
-    public Page<Album> getAllByKeyWord(@Parameter(hidden = true) Pageable pageable, @RequestParam String keyWord) {
-        log.info("getAllByKeyWord {} (pageNumber={}, pageSize={})", keyWord, pageable.getPageNumber(), pageable.getPageSize());
-        return service.getAllByKeyWord(keyWord, pageable);
+    @GetMapping("/byDecimal")
+    public Page<Album> getAllByDecimalNumber(@Parameter(hidden = true) Pageable pageable, @RequestParam String decimalNumber) {
+        log.info("getAllByDecimalNumber {} (pageNumber={}, pageSize={})", decimalNumber, pageable.getPageNumber(), pageable.getPageSize());
+        return service.getAllByDecimalNumber(decimalNumber, pageable);
+    }
+
+    @Parameters({@Parameter(name = "page", in = QUERY, description = "Zero-based page index (0..N)", schema = @Schema(type = "integer", defaultValue = "0")),
+            @Parameter(name = "size", in = QUERY, description = "The size of the page to be returned", schema = @Schema(type = "integer", defaultValue = "20"))})
+    @Operation(description = "Get page with albums by holder name")
+    @SecurityRequirements
+    @GetMapping("/byHolder")
+    public Page<Album> getAllByHolderName(@Parameter(hidden = true) Pageable pageable, @RequestParam String holderName) {
+        log.info("getAllByHolderName {} (pageNumber={}, pageSize={})", holderName, pageable.getPageNumber(), pageable.getPageSize());
+        return service.getAllByHolderName(holderName, pageable);
     }
 
     @Operation(description = "Get album")

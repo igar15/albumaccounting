@@ -27,8 +27,10 @@ public class AlbumTestData {
 
     public static final Pageable PAGEABLE = PageRequest.of(0, 20);
     public static final Page<Album> PAGE = new PageImpl<>(List.of(album1, album2, album3, album4), PAGEABLE, 4);
-    public static final Page<Album> PAGE_BY_KEYWORD_ONE_TOTAL = new PageImpl<>(List.of(album1), PAGEABLE, 1);
-    public static final Page<Album> PAGE_BY_KEYWORD_FOUR_TOTAL = new PageImpl<>(List.of(album1, album2, album3, album4), PAGEABLE, 4);
+    public static final Page<Album> PAGE_BY_DECIMAL_NUMBER_ONE_TOTAL = new PageImpl<>(List.of(album1), PAGEABLE, 1);
+    public static final Page<Album> PAGE_BY_DECIMAL_NUMBER_FOUR_TOTAL = new PageImpl<>(List.of(album1, album2, album3, album4), PAGEABLE, 4);
+    public static final Page<Album> PAGE_BY_HOLDER_NAME_ONE_TOTAL = new PageImpl<>(List.of(album4), PAGEABLE, 1);
+    public static final Page<Album> PAGE_BY_HOLDER_NAME_THREE_TOTAL = new PageImpl<>(List.of(album1, album2, album3), PAGEABLE, 3);
 
     public static Album getNew() {
         return new Album(null, "АБВГ.444444.009", I_STAMP, "С-3/П-1");

@@ -67,17 +67,31 @@ class AlbumServiceTest extends AbstractServiceTest {
     }
 
     @Test
-    void getAllByKeyWord() {
-        Page<Album> albums = service.getAllByKeyWord(album1.getDecimalNumber(), PAGEABLE);
-        assertEquals(PAGE_BY_KEYWORD_ONE_TOTAL, albums);
+    void getAllByDecimalNumber() {
+        Page<Album> albums = service.getAllByDecimalNumber(album1.getDecimalNumber(), PAGEABLE);
+        assertEquals(PAGE_BY_DECIMAL_NUMBER_ONE_TOTAL, albums);
         ALBUM_MATCHER.assertMatch(albums.getContent(), List.of(album1));
         Album firstAlbum = albums.getContent().get(0);
         EMPLOYEE_MATCHER.assertMatch(firstAlbum.getHolder(), employee1);
         DEPARTMENT_MATCHER.assertMatch(firstAlbum.getHolder().getDepartment(), department1);
 
-        albums = service.getAllByKeyWord("АБВГ", PAGEABLE);
-        assertEquals(PAGE_BY_KEYWORD_FOUR_TOTAL, albums);
+        albums = service.getAllByDecimalNumber("АБВГ", PAGEABLE);
+        assertEquals(PAGE_BY_DECIMAL_NUMBER_FOUR_TOTAL, albums);
         ALBUM_MATCHER.assertMatch(albums.getContent(), List.of(album1, album2, album3, album4));
+    }
+
+    @Test
+    void getAllByHolderName() {
+        Page<Album> albums = service.getAllByHolderName(employee2.getName(), PAGEABLE);
+        assertEquals(PAGE_BY_HOLDER_NAME_ONE_TOTAL, albums);
+        ALBUM_MATCHER.assertMatch(albums.getContent(), List.of(album4));
+        Album firstAlbum = albums.getContent().get(0);
+        EMPLOYEE_MATCHER.assertMatch(firstAlbum.getHolder(), employee2);
+        DEPARTMENT_MATCHER.assertMatch(firstAlbum.getHolder().getDepartment(), department1);
+
+        albums = service.getAllByHolderName("Петров", PAGEABLE);
+        assertEquals(PAGE_BY_HOLDER_NAME_THREE_TOTAL, albums);
+        ALBUM_MATCHER.assertMatch(albums.getContent(), List.of(album1, album2, album3));
     }
 
     @Test

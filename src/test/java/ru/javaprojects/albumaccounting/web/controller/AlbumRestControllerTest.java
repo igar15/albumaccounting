@@ -68,9 +68,9 @@ class AlbumRestControllerTest extends AbstractControllerTest {
 
     @Test
     @WithUserDetails(USER_MAIL)
-    void getAllByKeyWord() throws Exception {
-        ResultActions action = perform(MockMvcRequestBuilders.get(REST_URL + "by")
-                .param("keyWord", "абвг")
+    void getAllByDecimalNumber() throws Exception {
+        ResultActions action = perform(MockMvcRequestBuilders.get(REST_URL + "byDecimal")
+                .param("decimalNumber", "абвг")
                 .param("page", "0")
                 .param("size", "3"))
                 .andDo(print())
@@ -82,9 +82,9 @@ class AlbumRestControllerTest extends AbstractControllerTest {
     }
 
     @Test
-    void getAllByKeyWordUnAuthorized() throws Exception {
-        ResultActions action = perform(MockMvcRequestBuilders.get(REST_URL + "by")
-                .param("keyWord", "аб")
+    void getAllByDecimalNumberUnAuthorized() throws Exception {
+        ResultActions action = perform(MockMvcRequestBuilders.get(REST_URL + "byDecimal")
+                .param("decimalNumber", "аб")
                 .param("page", "0")
                 .param("size", "2"))
                 .andDo(print())
@@ -93,6 +93,35 @@ class AlbumRestControllerTest extends AbstractControllerTest {
 
         List<Album> albums = JsonUtil.readContentFromPage(action.andReturn().getResponse().getContentAsString(), Album.class);
         ALBUM_MATCHER.assertMatch(albums, album1, album2);
+    }
+
+    @Test
+    @WithUserDetails(USER_MAIL)
+    void getAllByHolderName() throws Exception {
+        ResultActions action = perform(MockMvcRequestBuilders.get(REST_URL + "byHolder")
+                .param("holderName", "петров")
+                .param("page", "0")
+                .param("size", "3"))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON));
+
+        List<Album> albums = JsonUtil.readContentFromPage(action.andReturn().getResponse().getContentAsString(), Album.class);
+        ALBUM_MATCHER.assertMatch(albums, album1, album2, album3);
+    }
+
+    @Test
+    void getAllByHolderNameUnAuthorized() throws Exception {
+        ResultActions action = perform(MockMvcRequestBuilders.get(REST_URL + "byHolder")
+                .param("holderName", "сидор")
+                .param("page", "0")
+                .param("size", "2"))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON));
+
+        List<Album> albums = JsonUtil.readContentFromPage(action.andReturn().getResponse().getContentAsString(), Album.class);
+        ALBUM_MATCHER.assertMatch(albums, album4);
     }
 
     @Test

@@ -42,9 +42,14 @@ public class AlbumService {
         return repository.findAllByOrderByDecimalNumber(pageable);
     }
 
-    public Page<Album> getAllByKeyWord(String keyWord, Pageable pageable) {
+    public Page<Album> getAllByDecimalNumber(String decimalNumber, Pageable pageable) {
         Assert.notNull(pageable, "pageable must not be null");
-        return repository.findAllByDecimalNumberContainsIgnoreCaseOrderByDecimalNumber(keyWord, pageable);
+        return repository.findAllByDecimalNumberContainsIgnoreCaseOrderByDecimalNumber(decimalNumber, pageable);
+    }
+
+    public Page<Album> getAllByHolderName(String holderName, Pageable pageable) {
+        Assert.notNull(pageable, "pageable must not be null");
+        return repository.findAllByHolder_NameContainsIgnoreCaseOrderByDecimalNumber(holderName, pageable);
     }
 
     public void delete(int id) {

@@ -45,7 +45,7 @@ class EmployeeServiceTest extends AbstractServiceTest {
 
     @Test
     void duplicateNamePhoneNumberCreate() {
-        assertThrows(DataAccessException.class, () -> service.create(new EmployeeTo(null, "Naumkin A.", "1-31-65", DEPARTMENT_1_ID)));
+        assertThrows(DataAccessException.class, () -> service.create(new EmployeeTo(null, employee1.getName(), employee1.getPhoneNumber(), DEPARTMENT_1_ID)));
     }
 
     @Test

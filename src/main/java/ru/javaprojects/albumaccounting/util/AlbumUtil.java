@@ -28,11 +28,11 @@ public class AlbumUtil {
     }
 
     public static Album createFromTo(AlbumTo albumTo) {
-        return new Album(albumTo.getId(), albumTo.getDecimalNumber(), albumTo.getStamp(), getAlbumLocation(albumTo.getDecimalNumber()));
+        return new Album(albumTo.getId(), albumTo.getDecimalNumber().toUpperCase(), albumTo.getStamp(), getAlbumLocation(albumTo.getDecimalNumber()));
     }
 
     public static Album updateFromTo(Album album, AlbumTo albumTo) {
-        album.setDecimalNumber(albumTo.getDecimalNumber());
+        album.setDecimalNumber(albumTo.getDecimalNumber().toUpperCase());
         album.setStamp(albumTo.getStamp());
         album.setLocation(getAlbumLocation(albumTo.getDecimalNumber()));
         return album;

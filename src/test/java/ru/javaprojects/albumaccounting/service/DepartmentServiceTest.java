@@ -29,7 +29,7 @@ class DepartmentServiceTest extends AbstractServiceTest {
 
     @Test
     void duplicateNameCreate() {
-        assertThrows(DataAccessException.class, () -> service.create(new Department(null, "KTK-40")));
+        assertThrows(DataAccessException.class, () -> service.create(new Department(null, department1.getName())));
     }
 
     @Test

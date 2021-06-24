@@ -41,7 +41,7 @@ class AlbumServiceTest extends AbstractServiceTest {
 
     @Test
     void duplicateDecimalNumberStampCreate() {
-        assertThrows(DataAccessException.class, () -> service.create(new AlbumTo(null, "ВУИА.444444.005", I_STAMP, EMPLOYEE_1_ID)));
+        assertThrows(DataAccessException.class, () -> service.create(new AlbumTo(null, album1.getDecimalNumber(), album1.getStamp(), EMPLOYEE_1_ID)));
     }
 
     @Test
@@ -75,7 +75,7 @@ class AlbumServiceTest extends AbstractServiceTest {
         EMPLOYEE_MATCHER.assertMatch(firstAlbum.getHolder(), employee1);
         DEPARTMENT_MATCHER.assertMatch(firstAlbum.getHolder().getDepartment(), department1);
 
-        albums = service.getAllByKeyWord("ВУИА", PAGEABLE);
+        albums = service.getAllByKeyWord("АБВГ", PAGEABLE);
         assertEquals(PAGE_BY_KEYWORD_FOUR_TOTAL, albums);
         ALBUM_MATCHER.assertMatch(albums.getContent(), List.of(album1, album2, album3, album4));
     }
@@ -117,7 +117,7 @@ class AlbumServiceTest extends AbstractServiceTest {
     @Test
     void createWithException() {
         validateRootCause(ConstraintViolationException.class, () -> service.create(new AlbumTo(null, " ", I_STAMP, EMPLOYEE_1_ID)));
-        validateRootCause(ConstraintViolationException.class, () -> service.create(new AlbumTo(null, "VUIA.4444", I_STAMP, EMPLOYEE_1_ID)));
-        validateRootCause(ConstraintViolationException.class, () -> service.create(new AlbumTo(null, "VUIA.444444.001", null, EMPLOYEE_1_ID)));
+        validateRootCause(ConstraintViolationException.class, () -> service.create(new AlbumTo(null, "АБВГ.4444", I_STAMP, EMPLOYEE_1_ID)));
+        validateRootCause(ConstraintViolationException.class, () -> service.create(new AlbumTo(null, "АБВГ.444444.001", null, EMPLOYEE_1_ID)));
     }
 }

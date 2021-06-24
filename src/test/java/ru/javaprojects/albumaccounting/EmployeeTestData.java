@@ -14,9 +14,9 @@ public class EmployeeTestData {
     public static final int EMPLOYEE_3_ID = START_SEQ + 7;
     public static final int NOT_FOUND = 10;
 
-    public static final Employee employee1 = new Employee(EMPLOYEE_1_ID, "Naumkin A.", "1-31-65");
-    public static final Employee employee2 = new Employee(EMPLOYEE_2_ID, "Yachuk M.", "1-32-65");
-    public static final Employee employee3 = new Employee(EMPLOYEE_3_ID, "Nastenko I.", "1-33-65");
+    public static final Employee employee1 = new Employee(EMPLOYEE_1_ID, "Петров П.П.", "1-11-11");
+    public static final Employee employee2 = new Employee(EMPLOYEE_2_ID, "Сидоров С.С.", "1-22-22");
+    public static final Employee employee3 = new Employee(EMPLOYEE_3_ID, "Иванов И.И.", "1-33-33");
 
     public static Employee getNew() {
         return new Employee(null, "NewName", "NewPhoneNumber");

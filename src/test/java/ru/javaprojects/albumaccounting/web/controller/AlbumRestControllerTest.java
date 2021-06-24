@@ -70,7 +70,7 @@ class AlbumRestControllerTest extends AbstractControllerTest {
     @WithUserDetails(USER_MAIL)
     void getAllByKeyWord() throws Exception {
         ResultActions action = perform(MockMvcRequestBuilders.get(REST_URL + "by")
-                .param("keyWord", "вуиа")
+                .param("keyWord", "абвг")
                 .param("page", "0")
                 .param("size", "3"))
                 .andDo(print())
@@ -84,7 +84,7 @@ class AlbumRestControllerTest extends AbstractControllerTest {
     @Test
     void getAllByKeyWordUnAuthorized() throws Exception {
         ResultActions action = perform(MockMvcRequestBuilders.get(REST_URL + "by")
-                .param("keyWord", "ву")
+                .param("keyWord", "аб")
                 .param("page", "0")
                 .param("size", "2"))
                 .andDo(print())

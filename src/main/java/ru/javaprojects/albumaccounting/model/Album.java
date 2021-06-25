@@ -10,7 +10,7 @@ import javax.validation.constraints.Size;
 public class Album extends AbstractBaseEntity {
 
     @NotBlank
-    @Size(min = 10, max = 30)
+    @Size(min = 12, max = 30)
     @Column(name = "decimal_number", nullable = false)
     private String decimalNumber;
 

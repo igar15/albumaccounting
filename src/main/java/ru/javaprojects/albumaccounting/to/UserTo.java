@@ -12,12 +12,12 @@ public class UserTo extends BaseTo implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @NotBlank
-    @Size(min = 2, max = 100)
+    @Size(min = 4, max = 20)
     private String name;
 
     @Email
     @NotBlank
-    @Size(max = 100)
+    @Size(max = 40)
     private String email;
 
     @NotNull

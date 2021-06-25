@@ -354,7 +354,7 @@ class UserRestControllerTest extends AbstractControllerTest {
     @WithUserDetails(value = ADMIN_MAIL)
     @Transactional(propagation = Propagation.NEVER)
     void createDuplicateEmail() throws Exception {
-        User newUser = new User(null, "New", user.getEmail(), "newPass", Role.ARCHIVE_WORKER, Role.ADMIN);
+        User newUser = new User(null, "NewName", user.getEmail(), "newPass", Role.ARCHIVE_WORKER, Role.ADMIN);
         perform(MockMvcRequestBuilders.post(REST_URL)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(jsonWithPassword(newUser, "newPass")))

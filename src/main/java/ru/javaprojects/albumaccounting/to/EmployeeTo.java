@@ -6,11 +6,11 @@ import javax.validation.constraints.Size;
 
 public class EmployeeTo extends BaseTo {
     @NotBlank
-    @Size(min = 2, max = 100)
+    @Size(min = 4, max = 20)
     private String name;
 
     @NotBlank
-    @Size(min = 5, max = 20)
+    @Size(min = 7, max = 20)
     private String phoneNumber;
 
     @NotNull

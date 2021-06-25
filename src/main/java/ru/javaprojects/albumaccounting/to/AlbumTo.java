@@ -8,7 +8,7 @@ import javax.validation.constraints.Size;
 
 public class AlbumTo extends BaseTo {
     @NotBlank
-    @Size(min = 10, max = 30)
+    @Size(min = 12, max = 30)
     private String decimalNumber;
 
     @NotNull

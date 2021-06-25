@@ -13,7 +13,7 @@ import javax.validation.constraints.Size;
 public class Employee extends AbstractNamedEntity {
 
     @NotBlank
-    @Size(min = 5, max = 20)
+    @Size(min = 7, max = 20)
     @Column(name = "phone_number", nullable = false)
     private String phoneNumber;
 

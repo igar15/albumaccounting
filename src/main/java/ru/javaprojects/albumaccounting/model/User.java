@@ -19,7 +19,7 @@ public class User extends AbstractNamedEntity {
 
     @Email
     @NotBlank
-    @Size(max = 100)
+    @Size(max = 40)
     @Column(name = "email", nullable = false, unique = true)
     private String email;
 

@@ -97,7 +97,7 @@ public class UserRestController {
     @Operation(description = "Change user's password (Admin only)")
     @PatchMapping("/{id}/password")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void changePassword(@PathVariable int id, @RequestParam @Size(min = 5, max = 100) String password) {
+    public void changePassword(@PathVariable int id, @RequestParam @Size(min = 5, max = 32) String password) {
         log.info("change password for user {}", id);
         service.changePassword(id, password);
     }

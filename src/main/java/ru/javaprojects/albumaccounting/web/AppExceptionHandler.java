@@ -33,7 +33,7 @@ public class AppExceptionHandler {
     private static final Logger log = LoggerFactory.getLogger(AppExceptionHandler.class);
 
     public static final String EXCEPTION_DUPLICATE_EMAIL = "User with this email already exists";
-    public static final String EXCEPTION_INVALID_PASSWORD = "Password length should be between 5 and 100 characters";
+    public static final String EXCEPTION_INVALID_PASSWORD = "Password length should be between 5 and 32 characters";
     public static final String EXCEPTION_DUPLICATE_DEPARTMENT = "Department with this name already exists";
     public static final String EXCEPTION_DUPLICATE_EMPLOYEE = "Employee with those name and phone number already exists";
     public static final String EXCEPTION_DUPLICATE_ALBUM = "Album with those decimal number and stamp already exists";
@@ -51,7 +51,7 @@ public class AppExceptionHandler {
             "albums_unique_decimal_number_stamp_idx", EXCEPTION_DUPLICATE_ALBUM,
             "albums_holder_id_fkey", EXCEPTION_HOLDER_HAS_ALBUMS);
 
-    private static final String INVALID_PASSWORD_CONSTRAINT = "changePassword.password: size must be between 5 and 100";
+    private static final String INVALID_PASSWORD_CONSTRAINT = "changePassword.password: size must be between 5 and 32";
 
     @ExceptionHandler(NoHandlerFoundException.class)
     public ResponseEntity<ErrorInfo> wrongRequest(HttpServletRequest req, NoHandlerFoundException e) {

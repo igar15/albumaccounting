@@ -51,7 +51,7 @@ public class ProfileRestController {
     @Operation(description = "Change user profile password")
     @PatchMapping("/password")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void changePassword(@RequestParam @Size(min = 5, max = 100) String password, @AuthenticationPrincipal AuthorizedUser authUser) {
+    public void changePassword(@RequestParam @Size(min = 5, max = 32) String password, @AuthenticationPrincipal AuthorizedUser authUser) {
         log.info("change password for user {}", authUser.getId());
         service.changePassword(authUser.getId(), password);
     }

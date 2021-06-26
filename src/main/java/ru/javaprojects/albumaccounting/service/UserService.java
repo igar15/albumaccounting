@@ -1,5 +1,6 @@
 package ru.javaprojects.albumaccounting.service;
 
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,6 +25,7 @@ public class UserService {
         this.passwordEncoder = passwordEncoder;
     }
 
+    @CacheEvict(value = "users", allEntries = true)
     public User create(User user) {
         Assert.notNull(user, "user must not be null");
         return prepareAndSave(user);
@@ -45,11 +47,13 @@ public class UserService {
         return repository.findAllByNameContainsIgnoreCaseOrEmailContainsIgnoreCaseOrderByNameAscEmail(keyWord, keyWord);
     }
 
+    @CacheEvict(value = "users", allEntries = true)
     public void delete(int id) {
         User user = get(id);
         repository.delete(user);
     }
 
+    @CacheEvict(value = "users", allEntries = true)
     @Transactional
     public void update(UserTo userTo) {
         Assert.notNull(userTo, "userTo must not be null");
@@ -57,12 +61,14 @@ public class UserService {
         updateFromTo(user, userTo);
     }
 
+    @CacheEvict(value = "users", allEntries = true)
     @Transactional
     public void enable(int id, boolean enabled) {
         User user = get(id);
         user.setEnabled(enabled);
     }
 
+    @CacheEvict(value = "users", allEntries = true)
     @Transactional
     public void changePassword(int id, String password) {
         Assert.notNull(password, "password must not be null");

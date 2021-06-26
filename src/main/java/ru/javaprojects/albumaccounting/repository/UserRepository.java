@@ -1,5 +1,6 @@
 package ru.javaprojects.albumaccounting.repository;
 
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
@@ -13,6 +14,7 @@ import java.util.Optional;
 @Transactional(readOnly = true)
 public interface UserRepository extends JpaRepository<User, Integer> {
 
+    @Cacheable(value = "users", key = "#email")
     @EntityGraph(attributePaths = {"roles"})
     Optional<User> findByEmail(String email);
 

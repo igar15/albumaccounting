@@ -1,5 +1,7 @@
 package ru.javaprojects.albumaccounting.model;
 
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
@@ -8,6 +10,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
+@Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 @Entity
 @Table(name = "employees", uniqueConstraints = {@UniqueConstraint(columnNames = {"name", "phone_number"}, name = "employees_unique_name_phone_number_idx")})
 public class Employee extends AbstractNamedEntity {

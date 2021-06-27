@@ -4,7 +4,7 @@
 Album Accounting System project 
 =================================
 
-This is the REST API implementation of constructor documentation album accounting system for tracking which developer has the constructor documentation album at the moment.
+This is the REST API implementation of Album Accounting System designed for accounting constructor documentation albums, stored in the archive, and for tracking which employee has the constructor documentation album at the moment.
 
 ### Technology stack used: 
 * Maven
@@ -18,7 +18,7 @@ This is the REST API implementation of constructor documentation album accountin
 * OpenAPI 3
 
 ### Project key logic:
-* System main purpose: obtaining information about the location of a specific album of constructor documentation at the moment.
+* System main purpose: accounting constructor documentation albums, stored in the archive; obtaining information about the location of a specific album of constructor documentation at the moment.
 * There are 3 types of users: admin, archive worker and anonymous users.
 * Admins can create/update/delete users, departments, employees and albums.
 * Archive workers can create/update/delete employees and albums. Also they can change their profile password.

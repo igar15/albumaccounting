@@ -39,17 +39,17 @@ public class AlbumService {
 
     public Page<Album> getAll(Pageable pageable) {
         Assert.notNull(pageable, "pageable must not be null");
-        return repository.findAllByOrderByDecimalNumber(pageable);
+        return repository.findAllByOrderByDecimalNumberAscStamp(pageable);
     }
 
     public Page<Album> getAllByDecimalNumber(String decimalNumber, Pageable pageable) {
         Assert.notNull(pageable, "pageable must not be null");
-        return repository.findAllByDecimalNumberContainsIgnoreCaseOrderByDecimalNumber(decimalNumber, pageable);
+        return repository.findAllByDecimalNumberContainsIgnoreCaseOrderByDecimalNumberAscStamp(decimalNumber, pageable);
     }
 
     public Page<Album> getAllByHolderName(String holderName, Pageable pageable) {
         Assert.notNull(pageable, "pageable must not be null");
-        return repository.findAllByHolder_NameContainsIgnoreCaseOrderByDecimalNumber(holderName, pageable);
+        return repository.findAllByHolder_NameContainsIgnoreCaseOrderByDecimalNumberAscStamp(holderName, pageable);
     }
 
     public void delete(int id) {

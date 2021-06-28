@@ -18,11 +18,11 @@ public interface AlbumRepository extends JpaRepository<Album, Integer> {
     Optional<Album> findById(int id);
 
     @EntityGraph(attributePaths = {"holder", "holder.department"})
-    Page<Album> findAllByOrderByDecimalNumber(Pageable pageable);
+    Page<Album> findAllByOrderByDecimalNumberAscStamp(Pageable pageable);
 
     @EntityGraph(attributePaths = {"holder", "holder.department"})
-    Page<Album> findAllByDecimalNumberContainsIgnoreCaseOrderByDecimalNumber(String keyWord, Pageable pageable);
+    Page<Album> findAllByDecimalNumberContainsIgnoreCaseOrderByDecimalNumberAscStamp(String keyWord, Pageable pageable);
 
     @EntityGraph(attributePaths = {"holder", "holder.department"})
-    Page<Album> findAllByHolder_NameContainsIgnoreCaseOrderByDecimalNumber(String holderName, Pageable pageable);
+    Page<Album> findAllByHolder_NameContainsIgnoreCaseOrderByDecimalNumberAscStamp(String holderName, Pageable pageable);
 }

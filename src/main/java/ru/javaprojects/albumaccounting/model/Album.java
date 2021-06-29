@@ -4,6 +4,7 @@ import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.time.LocalDate;
 
 @Entity
 @Table(name = "albums", uniqueConstraints = {@UniqueConstraint(columnNames = {"decimal_number", "stamp"}, name = "albums_unique_decimal_number_stamp_idx")})
@@ -19,6 +20,10 @@ public class Album extends AbstractBaseEntity {
     @Column(name = "stamp", nullable = false)
     private Stamp stamp;
 
+    @NotNull
+    @Column(name = "receiving_date", nullable = false, columnDefinition = "date default now()")
+    private LocalDate receivingDate = LocalDate.now();
+
     @NotBlank
     @Column(name = "location", nullable = false)
     private String location;
@@ -31,10 +36,11 @@ public class Album extends AbstractBaseEntity {
     public Album() {
     }
 
-    public Album(Integer id, String decimalNumber, Stamp stamp, String location) {
+    public Album(Integer id, String decimalNumber, Stamp stamp, LocalDate receivingDate, String location) {
         super(id);
         this.decimalNumber = decimalNumber;
         this.stamp = stamp;
+        this.receivingDate = receivingDate;
         this.location = location;
     }
 
@@ -52,6 +58,14 @@ public class Album extends AbstractBaseEntity {
 
     public void setStamp(Stamp stamp) {
         this.stamp = stamp;
+    }
+
+    public LocalDate getReceivingDate() {
+        return receivingDate;
+    }
+
+    public void setReceivingDate(LocalDate receivingDate) {
+        this.receivingDate = receivingDate;
     }
 
     public String getLocation() {
@@ -76,6 +90,7 @@ public class Album extends AbstractBaseEntity {
                 "id=" + id +
                 ", decimalNumber=" + decimalNumber +
                 ", stamp=" + stamp +
+                ", receivingDate=" + receivingDate +
                 ", location=" + location +
                 '}';
     }

@@ -9,6 +9,7 @@ import ru.javaprojects.albumaccounting.to.AlbumTo;
 import ru.javaprojects.albumaccounting.util.exception.NotFoundException;
 
 import javax.validation.ConstraintViolationException;
+import java.time.LocalDate;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -41,7 +42,7 @@ class AlbumServiceTest extends AbstractServiceTest {
 
     @Test
     void duplicateDecimalNumberStampCreate() {
-        assertThrows(DataAccessException.class, () -> service.create(new AlbumTo(null, album1.getDecimalNumber(), album1.getStamp(), EMPLOYEE_1_ID)));
+        assertThrows(DataAccessException.class, () -> service.create(new AlbumTo(null, album1.getDecimalNumber(), album1.getStamp(), LocalDate.now(), EMPLOYEE_1_ID)));
     }
 
     @Test
@@ -130,8 +131,8 @@ class AlbumServiceTest extends AbstractServiceTest {
 
     @Test
     void createWithException() {
-        validateRootCause(ConstraintViolationException.class, () -> service.create(new AlbumTo(null, " ", I_STAMP, EMPLOYEE_1_ID)));
-        validateRootCause(ConstraintViolationException.class, () -> service.create(new AlbumTo(null, "АБВГ.4444", I_STAMP, EMPLOYEE_1_ID)));
-        validateRootCause(ConstraintViolationException.class, () -> service.create(new AlbumTo(null, "АБВГ.444444.001", null, EMPLOYEE_1_ID)));
+        validateRootCause(ConstraintViolationException.class, () -> service.create(new AlbumTo(null, " ", I_STAMP, LocalDate.now(), EMPLOYEE_1_ID)));
+        validateRootCause(ConstraintViolationException.class, () -> service.create(new AlbumTo(null, "АБВГ.4444", I_STAMP, LocalDate.now(), EMPLOYEE_1_ID)));
+        validateRootCause(ConstraintViolationException.class, () -> service.create(new AlbumTo(null, "АБВГ.444444.001", null, LocalDate.now(), EMPLOYEE_1_ID)));
     }
 }

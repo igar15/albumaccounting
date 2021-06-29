@@ -14,6 +14,7 @@ import ru.javaprojects.albumaccounting.to.AlbumTo;
 import ru.javaprojects.albumaccounting.util.exception.NotFoundException;
 import ru.javaprojects.albumaccounting.web.json.JsonUtil;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -307,7 +308,7 @@ class AlbumRestControllerTest extends AbstractControllerTest {
     @WithUserDetails(ADMIN_MAIL)
     @Transactional(propagation = Propagation.NEVER)
     void createDuplicateDecimalNumberStamp() throws Exception {
-        AlbumTo newAlbumTo = new AlbumTo(null, album1.getDecimalNumber(), album1.getStamp(), EMPLOYEE_1_ID);
+        AlbumTo newAlbumTo = new AlbumTo(null, album1.getDecimalNumber(), album1.getStamp(), LocalDate.now(), EMPLOYEE_1_ID);
         perform(MockMvcRequestBuilders.post(REST_URL)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(JsonUtil.writeValue(newAlbumTo)))
@@ -321,7 +322,7 @@ class AlbumRestControllerTest extends AbstractControllerTest {
     @WithUserDetails(ADMIN_MAIL)
     @Transactional(propagation = Propagation.NEVER)
     void updateDuplicateDecimalNumberStamp() throws Exception {
-        AlbumTo newAlbumTo = new AlbumTo(ALBUM_1_ID, album2.getDecimalNumber(), album2.getStamp(), EMPLOYEE_1_ID);
+        AlbumTo newAlbumTo = new AlbumTo(ALBUM_1_ID, album2.getDecimalNumber(), album2.getStamp(), LocalDate.now(), EMPLOYEE_1_ID);
         perform(MockMvcRequestBuilders.put(REST_URL + ALBUM_1_ID)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(JsonUtil.writeValue(newAlbumTo)))

@@ -27,7 +27,7 @@ This is the REST API implementation of Album Accounting System designed for acco
 * An archive worker, when the employee returns the album to the archive, enters the relevant information into the system.
 
 ###Application Domain Model Schema
-![domain_model](https://user-images.githubusercontent.com/60218699/122444402-2c9f6b80-cfa9-11eb-89e0-d6ac1804393e.png)
+![domain_model](https://user-images.githubusercontent.com/60218699/123831807-5d6a9380-d90d-11eb-93d5-a463fb4cf4fd.png)
 
 ### API documentation:
 #### Swagger documentation

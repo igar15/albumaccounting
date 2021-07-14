@@ -12,9 +12,10 @@ This is the REST API implementation of Album Accounting System designed for acco
 * Spring MVC
 * Spring Data JPA (Hibernate)
 * Spring Security
+* Ehcache
 * REST (Jackson)
 * JSON Web Token
-* JUnit
+* JUnit 5
 * OpenAPI 3
 
 ### Project key logic:
@@ -26,7 +27,7 @@ This is the REST API implementation of Album Accounting System designed for acco
 * An archive worker, when issuing an album to the employee, enters the relevant information into the system.
 * An archive worker, when the employee returns the album to the archive, enters the relevant information into the system.
 
-###Application Domain Model Schema
+### Application Domain Model Schema
 ![domain_model](https://user-images.githubusercontent.com/60218699/123831807-5d6a9380-d90d-11eb-93d5-a463fb4cf4fd.png)
 
 ### API documentation:

@@ -7,6 +7,7 @@ import io.swagger.v3.oas.annotations.info.Info;
 import io.swagger.v3.oas.annotations.info.License;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.security.SecurityScheme;
+import io.swagger.v3.oas.annotations.servers.Server;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springdoc.core.GroupedOpenApi;
 import org.springframework.context.annotation.Bean;
@@ -27,6 +28,8 @@ import org.springframework.context.annotation.Configuration;
                 license = @License(name = "Apache 2.0", url = "http://www.apache.org/licenses/LICENSE-2.0"),
                 contact = @Contact(url = "https://javaprojects.ru", name = "Igor Shlyakhtenkov", email = "ishlyakhtenkov@yandex.ru")
         ),
+        servers = {@Server(url = "https://javaprojects.ru/albumaccounting", description = "Internet Server url"),
+                   @Server(url = "https://localhost:8443/albumaccounting", description = "Local Server url")},
         tags = {@Tag(name = "Profile Controller"),
                 @Tag(name = "Album Controller"),
                 @Tag(name = "Department Controller"),

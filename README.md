@@ -68,10 +68,10 @@ This is the REST API implementation of Album Accounting System designed for acco
 - DELETE /api/albums/{albumId} (delete album with id = albumId)
 
 ### Caching strategy
-####Spring caching (Ehcache provider):
+#### Spring caching (Ehcache provider):
 - Get user (multiNonExpiryCache, cache key = {email}, evicts all entries, when create/update/delete/enable/change_password of any user)
 - Get all departments (singleNonExpiryCache, evicts when create/update/delete any department)
 - Get all employees for a department (multiNonExpiryCache, cache key = {departmentId}, evicts all entries, when create/update/delete any employee, and when the department deletes)  
 
-####Hibernate 2nd level cache:
+#### Hibernate 2nd level cache:
 - Employee entity (CacheConcurrencyStrategy: NONSTRICT_READ_WRITE)

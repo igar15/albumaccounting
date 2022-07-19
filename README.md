@@ -1,5 +1,5 @@
-[![Codacy Badge](https://app.codacy.com/project/badge/Grade/e99d6883f16949cf967a1f52b341580a)](https://www.codacy.com/gh/igar15/albumaccounting/dashboard)
-[![Build Status](https://api.travis-ci.com/igar15/albumaccounting.svg?branch=master)](https://travis-ci.com//igar15/albumaccounting)
+[![Codacy Badge](https://app.codacy.com/project/badge/Grade/e99d6883f16949cf967a1f52b341580a)](https://www.codacy.com/gh/ishlyakhtenkov/albumaccounting/dashboard)
+[![Build Status](https://api.travis-ci.com/ishlyakhtenkov/albumaccounting.svg?branch=master)](https://travis-ci.com//ishlyakhtenkov/albumaccounting)
 
 Album Accounting System project 
 =================================
